@@ -238,6 +238,20 @@ body {
     background: gold;
     transition: width 0.3s ease; /* плавное появление */
 }
+/* СЕТКА КАРТОЧЕК 4×2 */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px; /* отступы только между карточками */
+    padding: 0; /* никаких внешних отступов */
+}
+
+/* КВАДРАТНЫЕ КАРТОЧКИ */
+.card {
+    background: #00c0c0;
+    aspect-ratio: 1 / 1; /* квадрат */
+    border-radius: 10px;
+}
 
 /* При наведении линия выезжает */
 .menu-item:hover::after {
