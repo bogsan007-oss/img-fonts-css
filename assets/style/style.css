@@ -197,7 +197,7 @@ body {
 }
 /* === menu ===*/
 .menu-line {
-    background: #000fff;          /* ЧЁРНЫЙ фон меню — вернули */
+    background: #000;          /* ЧЁРНЫЙ фон меню — вернули */
     height: 22px;              /* узкая линия */
     display: flex;
     align-items: center;
