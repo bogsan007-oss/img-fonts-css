@@ -99,19 +99,8 @@ body {
 
 /* ===== ЭМБЛЕМА ===== */
 .logo {
-    position: absolute;
-    top: -8px;
-    left: -12px;
-
-    width:  85px;
-    height: 70px;
-
-    background: url('https://raw.githubusercontent.com/bogsan007-oss/img-fonts-css/main/assets/img/logo.png') no-repeat center/cover;
-	filter: drop-shadow(0 0 4px #ffd86b)
-	        drop-shadow(0 0 4px #ffd86b)
-            drop-shadow(0 0 14px #ffd86b);
-	}
-
+    background: red;
+}
 
 /* ===== НАЗВАНИЕ ===== */
 .title {
