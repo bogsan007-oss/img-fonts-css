@@ -1,0 +1,232 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: #000; /* чёрный фон страницы */
+    color: #fff;      /* белый текст по умолчанию */
+    font-family: sans-serif;
+}
+
+
+.site-wrapper {
+    width: 750px;
+    margin: 13px auto 0 auto; /* опустили вниз на 40px */
+}
+
+
+        /* Верхняя группа */
+        .test-header { background:#e74c3c; padding:20px; }
+        .test-left   { background:#3498db; padding:20px; }
+        .test-right  { background:#2ecc71; padding:20px; }
+        .test-line   { background:#f1c40f; padding:10px; }
+
+        /* Основной блок */
+        .test-main   { background:#9b59b6; padding:20px; display:grid; grid-template-columns:repeat(3,1fr); gap:15px; }
+        .test-card   { background:#1abc9c; padding:40px; text-align:center; font-size:20px; }
+
+        /* Нижняя линия */
+        .test-line-bottom { background:#f1c40f; padding:10px; }
+
+        /* Футер */
+        .test-footer { background:#d35400; padding:20px; text-align:center; }
+		 /* Общий контейнер шапки */
+    .header-wrapper {
+        width: 750px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0 auto;
+        gap: 0;
+    }
+
+    /* Временные цвета */
+    .test-logo  { background:#e74c3c; }
+    .test-title { background:#3498db; }
+    .test-ads   { background:#2ecc71; }
+
+    /* Размеры блоков */
+    .header-logo {
+        width: 60px;
+        height: 60px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
+
+    .header-title {
+        width: 222px;
+        height: 60px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:18px;
+        font-weight:bold;
+    }
+
+    .header-ads {
+        width: 468px;
+        height: 60px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:16px;
+    }
+
+/* ===== ПОДКЛЮЧЕНИЕ ШРИФТА ===== */
+@font-face {
+    font-family: 'Blagovest';
+    src: url('fonts/Blagovest.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* ===== ВЕРХНИЙ БЛОК ===== */
+.top-block {
+    width: 758px;
+    height: 68px;
+    background: #000;
+    position: relative;
+
+    padding: 12px;
+    box-sizing: border-box;
+
+    border-bottom: 1px solid gold;
+
+    display: flex;
+    align-items: center;      /* вертикальный центр */
+    justify-content: flex-start; /* текст уходит влево */
+}
+
+/* ===== ЭМБЛЕМА ===== */
+.logo {
+    position: absolute;
+    top: -8px;
+    left: -12px;
+    width:  85px;
+    height: 70px;
+
+    background: url('img/logo.png') no-repeat center/cover;
+	filter: drop-shadow(0 0 4px #ffd86b)
+	        drop-shadow(0 0 4px #ffd86b)
+            drop-shadow(0 0 14px #ffd86b);
+	}
+
+/* ===== НАЗВАНИЕ ===== */
+.title {
+    font-family: 'Blagovest', sans-serif;
+    font-size: 25px;
+    color: #000;
+    font-weight: 600;
+    z-index: 2;
+    margin-left: 70px; /* чтобы не прилипало к эмблеме */
+    filter: drop-shadow(0 0 4px #ffd86b) /* такое же свечение как у эмблемы */
+	        drop-shadow(0 0 4px #ffd86b)
+            drop-shadow(0 0 14px #ffd86b);
+	
+}
+
+/* ===== РЕКЛАМА ===== */
+.ad-block {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+
+    width: 468px;
+    height: 60px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ad-block img {
+    width: 468px;
+    height: 60px;
+    display: block;
+
+    filter: brightness(0.95);
+}
+
+/* === Средний блок шапки (контейнер) === */
+.header-middle {
+    display: flex;
+    gap: 15px;        /* Отступ между левым и правым блоком */
+    margin-top: 15px; /* Отступ сверху от верхнего блока */
+}
+
+/* === Левый большой блок (превью публикации) === */
+.middle-left {
+    flex: 3;                 /* ширина блока ~550px */
+    background: #3498db;     /* фон, если картинка меньше */
+    padding: 0;              /* убираем внутренние отступы */
+    position: relative;      /* чтобы текст был поверх картинки */
+    overflow: hidden;        /* чтобы ничего не вылезало */
+}
+
+.middle-left .preview {
+    width: 100%;             /* картинка от края до края */
+    height: auto;            /* сохраняем пропорции */
+    display: block;          /* убираем лишний отступ снизу */
+}
+
+.middle-left .title {
+    position: absolute;      /* текст поверх картинки */
+    bottom: 10px;            /* отступ снизу */
+    left: 10px;              /* отступ слева */
+    color: white;            /* цвет текста */
+    font-size: 22px;         /* размер */
+    font-weight: normal;      /* НЕ жирный */
+	font-family: 'Kanit', sans-serif; /* аккуратный узкий шрифт */
+    text-shadow: 0 0 5px black; /* читаемость */
+}
+
+
+
+/* === Правый узкий блок (фото) === */
+.middle-right {
+    flex: 1;          /* Ширина: примерно 200px */
+    background: #2ecc71;
+    padding: 0;       /* Убрали отступы, чтобы фото стояло ровно */
+}
+
+/* === Фото внутри правого блока === */
+.middle-right img {
+    width: 200px;     /* Фиксированная ширина, чтобы не ломать макет */
+    height: auto;     /* Автоматическая высота */
+    display: block;   /* Убирает лишние отступы снизу */
+}
+/* === menu ===*/
+.menu-line {
+    background: #000fff;          /* ЧЁРНЫЙ фон меню — вернули */
+    height: 22px;              /* узкая линия */
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    
+}
+
+.menu-item {
+    position: relative;
+    color: gold;
+    text-decoration: none;
+    font-size: 16px;
+    font-family: 'Roboto Condensed', sans-serif;
+    padding: 0 5px;
+}
+
+/* Линия, которая выезжает */
+.menu-item::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;          /* чуть ниже текста */
+    width: 0%;             /* старт — линия скрыта */
+    height: 2px;
+    background: gold;
+    transition: width 0.3s ease; /* плавное появление */
+}
+
+/* При наведении линия выезжает */
+.menu-item:hover::after {
+    width: 100%;
+}
