@@ -70,7 +70,9 @@ body {
         font-size:18px;
         font-weight:bold;
     }
-
+    .ad-block {
+    filter: brightness(50%);
+}
     .header-ads {
         width: 468px;
         height: 60px;
