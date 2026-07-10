@@ -138,7 +138,7 @@ body {
 	
 }
 
-/* ===== РЕКЛАМА ===== */
+/* БЛОК РЕКЛАМЫ — контейнер */
 .ad-block {
     position: absolute;
     right: 4px;
@@ -146,19 +146,23 @@ body {
 
     width: 468px;
     height: 60px;
-    filter: brightness(50%);
+
     display: flex;
     align-items: center;
     justify-content: center;
+
+    /* фильтр убран — он мешал */
 }
 
+/* КАРТИНКА РЕКЛАМЫ — затемнение */
 .ad-block img {
     width: 468px;
     height: 60px;
     display: block;
 
-    filter: brightness(0.95);
+    filter: brightness(50%); /* единственный фильтр */
 }
+
 
 /* === Средний блок шапки (контейнер) === */
 .header-middle {
