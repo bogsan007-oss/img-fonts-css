@@ -75,7 +75,7 @@ body {
 /* ===== ПОДКЛЮЧЕНИЕ ШРИФТА ===== */
 @font-face {
     font-family: 'Blagovest';
-    src: url('assets/fonts/Blagovest.ttf') format('truetype');
+    src: url('/assets/fonts/Blagovest.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -105,7 +105,7 @@ body {
     width:  85px;
     height: 70px;
 
-    background: url('assets/img/logo.png') no-repeat center/cover;
+    background: url('/assets/img/logo.png') no-repeat center/cover;
 	filter: drop-shadow(0 0 4px #ffd86b)
 	        drop-shadow(0 0 4px #ffd86b)
             drop-shadow(0 0 14px #ffd86b);
