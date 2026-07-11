@@ -1,0 +1,30 @@
+name: Build Keys
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Create dist folder
+        run: mkdir -p dist
+
+      - name: Generate keys.js
+        run: |
+          echo "export const API_KEY_YOUTUBE='${{ secrets.API_KEY_YOUTUBE }}';" >> dist/keys.js
+          echo "export const CHANNEL_ID='${{ secrets.CHANNEL_ID }}';" >> dist/keys.js
+          echo "export const PLAYLIST_ID_1='${{ secrets.PLAYLIST_ID_1 }}';" >> dist/keys.js
+          echo "export const PLAYLIST_ID_2='${{ secrets.PLAYLIST_ID_2 }}';" >> dist/keys.js
+          echo "export const PLAYLIST_ID_3='${{ secrets.PLAYLIST_ID_3 }}';" >> dist/keys.js
+
+      - name: Upload keys.js as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: keys
+          path: dist/keys.js
