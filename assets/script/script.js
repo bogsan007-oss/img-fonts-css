@@ -6,7 +6,7 @@ import {
     PLAYLIST_ID_1,
     PLAYLIST_ID_2,
     PLAYLIST_ID_3
-} from '../../dist/keys.js';
+} from './keys.js';
 
 
 
