@@ -151,25 +151,30 @@ body {
     align-items: center;
     justify-content: center;
 
-    position: relative; /* нужно для затемнения */
+    position: relative;
 }
 
-/* ЗАТЕМНЕНИЕ РЕКЛАМЫ — работает на iframe */
+/* ЗАТЕМНЕНИЕ — по умолчанию лёгкое */
 .ad-block::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.45); /* затемнение */
-    pointer-events: none; /* реклама кликается */
+    background: rgba(0,0,0,0.25); /* лёгкое затемнение */
+    pointer-events: none;
+    transition: background 0.25s ease; /* плавность */
 }
 
-/* КАРТИНКА РЕКЛАМЫ — без фильтра */
+/* ПРИ НАВЕДЕНИИ — сильнее */
+.ad-block:hover::after {
+    background: rgba(0,0,0,0.55); /* сильнее затемнение */
+}
+
+/* КАРТИНКА РЕКЛАМЫ */
 .ad-block img {
     width: 468px;
     height: 60px;
     display: block;
 }
-
 
 /* === Средний блок шапки (контейнер) === */
 .header-middle {
