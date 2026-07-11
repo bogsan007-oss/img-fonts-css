@@ -151,16 +151,23 @@ body {
     align-items: center;
     justify-content: center;
 
-    /* фильтр убран — он мешал */
+    position: relative; /* нужно для затемнения */
 }
 
-/* КАРТИНКА РЕКЛАМЫ — затемнение */
+/* ЗАТЕМНЕНИЕ РЕКЛАМЫ — работает на iframe */
+.ad-block::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.45); /* затемнение */
+    pointer-events: none; /* реклама кликается */
+}
+
+/* КАРТИНКА РЕКЛАМЫ — без фильтра */
 .ad-block img {
     width: 468px;
     height: 60px;
     display: block;
-
-    filter: brightness(50%); /* единственный фильтр */
 }
 
 
