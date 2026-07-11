@@ -214,12 +214,11 @@ body {
 }
 /* === menu ===*/
 .menu-line {
-    background: #000;          /* ЧЁРНЫЙ фон меню — вернули */
+    background: #000;          /* ЧЁРНЫЙ фон меню — как было */
     height: 22px;              /* узкая линия */
     display: flex;
     align-items: center;
     padding-left: 10px;
-    
 }
 
 .menu-item {
@@ -229,19 +228,21 @@ body {
     font-size: 16px;
     font-family: 'Roboto Condensed', sans-serif;
     padding: 0 5px;
+
+    /* фон, который будет выезжать */
+    background-image: linear-gradient(gold, gold);
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    background-size: 0% 100%;          /* фон спрятан */
+    transition: background-size 0.35s ease, color 0.35s ease;
 }
 
-/* Линия, которая выезжает */
-.menu-item::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -2px;          /* чуть ниже текста */
-    width: 0%;             /* старт — линия скрыта */
-    height: 2px;
-    background: gold;
-    transition: width 0.3s ease; /* плавное появление */
+/* Фон выезжает слева направо */
+.menu-item:hover {
+    background-size: 100% 100%;        /* фон выезжает */
+    color: #000;                       /* текст становится тёмным */
 }
+
 /* СЕТКА КАРТОЧЕК 4×2 */
 .cards {
     display: grid;
