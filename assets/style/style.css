@@ -191,7 +191,7 @@ body {
     bottom: 10px;            /* отступ снизу */
     left: 10px;              /* отступ слева */
     color: white;            /* цвет текста */
-    font-size: 22px;         /* размер */
+    font-size: 18px;         /* размер */
     font-weight: normal;      /* НЕ жирный */
 	font-family: 'Kanit', sans-serif; /* аккуратный узкий шрифт */
     text-shadow: 0 0 5px black; /* читаемость */
