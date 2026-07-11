@@ -214,8 +214,8 @@ body {
 }
 /* === menu ===*/
 .menu-line {
-    background: #000;          /* ЧЁРНЫЙ фон меню — как было */
-    height: 22px;              /* узкая линия */
+    background: #000000;
+    height: 22px;
     display: flex;
     align-items: center;
     padding-left: 10px;
@@ -229,12 +229,24 @@ body {
     font-family: 'Roboto Condensed', sans-serif;
     padding: 0 5px;
 
-    /* фон, который будет выезжать */
+    /* фон */
     background-image: linear-gradient(gold, gold);
     background-repeat: no-repeat;
     background-position: left bottom;
-    background-size: 0% 100%;          /* фон спрятан */
+    background-size: 0% 100%;
     transition: background-size 0.35s ease, color 0.35s ease;
+}
+
+/* ПОЛНОЕ отключение линии */
+.menu-item::after {
+    content: "";
+    display: none !important;
+}
+
+/* фон выезжает */
+.menu-item:hover {
+    background-size: 100% 100%;
+    color: #000;
 }
 
 /* Фон выезжает слева направо */
