@@ -191,6 +191,7 @@ body {
     padding: 0;              /* убираем внутренние отступы */
     position: relative;      /* чтобы текст был поверх картинки */
     overflow: hidden;        /* чтобы ничего не вылезало */
+	height: 310px;           /* фиксируем высоту блока */
 }
 
 .middle-left .preview {
