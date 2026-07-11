@@ -15,10 +15,11 @@ jobs:
 
       - name: Create keys.js
         run: |
-          echo "window.API_KEY_YOUTUBE = '${{ secrets.API_KEY_YOUTUBE }}';" >> dist/keys.js
-          echo "window.PLAYLIST_ID_1 = '${{ secrets.PLAYLIST_ID_1 }}';" >> dist/keys.js
-          echo "window.PLAYLIST_ID_2 = '${{ secrets.PLAYLIST_ID_2 }}';" >> dist/keys.js
-          echo "window.PLAYLIST_ID_3 = '${{ secrets.PLAYLIST_ID_3 }}';" >> dist/keys.js
+              echo "window.API_KEY_YOUTUBE = '${{ secrets.API_KEY_YOUTUBE }}';" >> dist/keys.js
+              echo "window.CHANNEL_ID = '${{ secrets.CHANNEL_ID }}';" >> dist/keys.js
+              echo "window.PLAYLIST_ID_1 = '${{ secrets.PLAYLIST_ID_1 }}';" >> dist/keys.js
+              echo "window.PLAYLIST_ID_2 = '${{ secrets.PLAYLIST_ID_2 }}';" >> dist/keys.js
+              echo "window.PLAYLIST_ID_3 = '${{ secrets.PLAYLIST_ID_3 }}';" >> dist/keys.js
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
