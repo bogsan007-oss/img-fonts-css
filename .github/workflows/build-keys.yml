@@ -24,7 +24,7 @@ jobs:
           echo "export const PLAYLIST_ID_3='${{ secrets.PLAYLIST_ID_3 }}';" >> dist/keys.js
 
       - name: Upload keys.js as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: keys
           path: dist/keys.js
