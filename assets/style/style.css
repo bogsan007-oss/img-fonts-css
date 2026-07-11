@@ -152,6 +152,7 @@ body {
     justify-content: center;
 
     position: relative;
+	z-index: 5; /* Дед, вот это решает проблему */
 }
 
 /* ЗАТЕМНЕНИЕ — по умолчанию лёгкое */
