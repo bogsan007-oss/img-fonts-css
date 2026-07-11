@@ -1,0 +1,36 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create dist folder
+        run: mkdir -p dist
+
+      - name: Generate keys.js
+        run: |
+          echo "export const API_KEY_YOUTUBE='${{ secrets.API_KEY_YOUTUBE }}';" >> dist/keys.js
+          echo "export const CHANNEL_ID='${{ secrets.CHANNEL_ID }}';" >> dist/keys.js
+          echo "export const PLAYLIST_ID_1='${{ secrets.PLAYLIST_ID_1 }}';" >> dist/keys.js
+          echo "export const PLAYLIST_ID_2='${{ secrets.PLAYER_ID_2 }}';" >> dist/keys.js
+          echo "export const PLAYLIST_ID_3='${{ secrets.PLAYER_ID_3 }}';" >> dist/keys.js
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - uses: actions/deploy-pages@v2
