@@ -151,23 +151,22 @@ body {
     align-items: center;
     justify-content: center;
 
-    position: relative;
-	z-index: 5; /* Дед, вот это решает проблему */
+    z-index: 5;
 }
 
-/* ЗАТЕМНЕНИЕ — по умолчанию лёгкое */
+/* ЗАТЕМНЕНИЕ — по умолчанию сильнее */
 .ad-block::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.25); /* лёгкое затемнение */
+    background: rgba(0,0,0,0.55);
     pointer-events: none;
-    transition: background 0.25s ease; /* плавность */
+    transition: background 0.25s ease;
 }
 
-/* ПРИ НАВЕДЕНИИ — сильнее */
+/* ПРИ НАВЕДЕНИИ — осветление */
 .ad-block:hover::after {
-    background: rgba(0,0,0,0.55); /* сильнее затемнение */
+    background: rgba(0,0,0,0.25);
 }
 
 /* КАРТИНКА РЕКЛАМЫ */
@@ -176,6 +175,7 @@ body {
     height: 60px;
     display: block;
 }
+
 
 /* === Средний блок шапки (контейнер) === */
 .header-middle {
