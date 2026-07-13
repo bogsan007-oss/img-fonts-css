@@ -277,21 +277,21 @@ body {
 #cards {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+    gap: 4px;
     padding: 0;
 }
 
-/* КВАДРАТНЫЕ КАРТОЧКИ */
 .card {
     background: #00c0c0;
     aspect-ratio: 1 / 1;
     border-radius: 10px;
+    overflow: hidden;
 }
+
 .card-thumb {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 10px;
 }
 
 
