@@ -283,6 +283,7 @@ body {
 
 .card {
     background: #00c0c0;
+	max-width: 180px;
     aspect-ratio: 1 / 1;
     border-radius: 10px;
     overflow: hidden;
