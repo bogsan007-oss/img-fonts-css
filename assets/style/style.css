@@ -195,9 +195,13 @@ body {
 }
 
 .middle-left .preview {
+	 position: absolute;  /* фиксируем внутри блока */
     width: 100%;             /* картинка от края до края */
-    height: auto;            /* сохраняем пропорции */
+	height: 100%;        /* картинка занимает весь блок */
+    object-fit: cover;   /* красиво обрезается */
     display: block;          /* убираем лишний отступ снизу */
+	margin: 0;
+    padding: 0;
 }
 
 .middle-left .title {
