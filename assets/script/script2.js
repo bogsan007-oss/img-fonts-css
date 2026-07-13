@@ -73,9 +73,9 @@ function showMore() {
             <div class="card-title">${title}</div>
         `;
 
-        // ✔ Исправлено: теперь карточка ведёт на страницу просмотра
+        // ✔ Теперь карточка ведёт на наш просмотр, а НЕ на YouTube
         card.onclick = () => {
-            window.location.href = `/p/watch.html?id=${videoId}`;
+            window.location.href = `/?watch=${videoId}`;
         };
 
         container.appendChild(card);
