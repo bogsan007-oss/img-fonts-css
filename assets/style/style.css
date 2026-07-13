@@ -273,20 +273,21 @@ body {
     color: #000;                       /* текст становится тёмным */
 }
 
-/* СЕТКА КАРТОЧЕК 4×2 */
-.cards {
+/* СЕТКА КАРТОЧЕК 4×2 — теперь на #cards */
+#cards {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 12px; /* отступы только между карточками */
-    padding: 0; /* никаких внешних отступов */
+    gap: 12px;
+    padding: 0;
 }
 
 /* КВАДРАТНЫЕ КАРТОЧКИ */
 .card {
     background: #00c0c0;
-    aspect-ratio: 1 / 1; /* квадрат */
+    aspect-ratio: 1 / 1;
     border-radius: 10px;
 }
+
 
 /* При наведении линия выезжает */
 .menu-item:hover::after {
