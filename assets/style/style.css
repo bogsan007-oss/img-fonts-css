@@ -273,27 +273,30 @@ body {
     color: #000;                       /* текст становится тёмным */
 }
 
-/* СЕТКА КАРТОЧЕК 4×2 — теперь на #cards */
+/* СЕТКА КАРТОЧЕК — компактная */
 #cards {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
     gap: 4px;
-    padding: 0;
+    max-width: 750px; /* чтобы не растягивалось на весь экран */
+    margin: 0 auto;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
 }
 
+/* КАРТОЧКА */
 .card {
     background: #00c0c0;
-	max-width: 180px;
     aspect-ratio: 1 / 1;
     border-radius: 10px;
     overflow: hidden;
 }
 
+/* КАРТИНКА */
 .card-thumb {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
+
 
 
 /* При наведении линия выезжает */
