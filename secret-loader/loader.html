@@ -1,0 +1,5 @@
+<script>
+fetch("https://cdn.jsdelivr.net/gh/bogsan007-oss/img-fonts-css/secret/secretCSS.css")
+  .then(r => r.text())
+  .then(css => parent.postMessage(css, "*"));
+</script>
