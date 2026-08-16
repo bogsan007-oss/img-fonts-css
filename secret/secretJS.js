@@ -79,7 +79,7 @@ function animateDual() {
     avg = avg / freqData.length;
 
     // Уменьшаем амплитуду (делим на 3)
-    const width = avg / 6;
+    const width = avg / 8;
 
     leftBar.style.width  = width + 'px';
     rightBar.style.width = width + 'px';
