@@ -54,5 +54,40 @@ document.addEventListener("DOMContentLoaded", function() {
     audioCtx.resume();
     animateBars();
   });
+/* === ДВУСТОРОННИЙ ВИЗУАЛИЗАТОР === */
+
+const leftBar  = document.querySelector('.left-bar');
+const rightBar = document.querySelector('.right-bar');
+
+const audioCtx2 = new (window.AudioContext || window.webkitAudioContext)();
+const analyser2 = audioCtx2.createAnalyser();
+analyser2.fftSize = 64;
+
+const source2 = audioCtx2.createMediaElementSource(playerAudio);
+source2.connect(analyser2);
+analyser2.connect(audioCtx2.destination);
+
+const freqData = new Uint8Array(analyser2.frequencyBinCount);
+
+function animateDual() {
+    requestAnimationFrame(animateDual);
+    analyser2.getByteFrequencyData(freqData);
+
+    // Берём среднюю частоту — она даёт ровный "дыхательный" эффект
+    let avg = 0;
+    for (let i = 0; i < freqData.length; i++) avg += freqData[i];
+    avg = avg / freqData.length;
+
+    // Уменьшаем амплитуду (делим на 3)
+    const width = avg / 3;
+
+    leftBar.style.width  = width + 'px';
+    rightBar.style.width = width + 'px';
+}
+
+playerAudio.addEventListener('play', () => {
+    audioCtx2.resume();
+    animateDual();
+});
 
 });
