@@ -40,4 +40,33 @@ console.log(playerBtn);
   });
 
 });
+/* === ВИЗУАЛИЗАТОР ПОД МУЗЫКУ === */
+
+const audio = document.getElementById('audio-player');
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+const source = audioCtx.createMediaElementSource(audio);
+
+const analyser = audioCtx.createAnalyser();
+analyser.fftSize = 64;
+
+source.connect(analyser);
+analyser.connect(audioCtx.destination);
+
+const dataArray = new Uint8Array(analyser.frequencyBinCount);
+const bars = document.querySelectorAll('#visualizer .bar');
+
+function animateBars() {
+    requestAnimationFrame(animateBars);
+    analyser.getByteFrequencyData(dataArray);
+
+    for (let i = 0; i < bars.length; i++) {
+        const value = dataArray[i];
+        bars[i].style.height = (value / 2) + 'px';
+    }
+}
+
+audio.addEventListener('play', () => {
+    audioCtx.resume();
+    animateBars();
+});
 
