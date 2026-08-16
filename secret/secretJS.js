@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const playerBtn = document.querySelector("#play-icon img");
 
   // Аудио-файл (пока пустой, ты вставишь свой)
-  const playerAudio = new Audio("https://raw.githubusercontent.com/bogsan007-oss/img-fonts-css/main/assets/Music/Piem_sa_Sashu.mp3");
+  const playerAudio = new Audio("https://bogsan007-oss.github.io/img-fonts-css/assets/Music/Piem_sa_Sashu.mp3");
 
   // Состояние плеера
   let playerPlaying = false;
