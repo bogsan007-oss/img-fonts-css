@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function() {
     analyser.getByteFrequencyData(dataArray);
 
     for (let i = 0; i < bars.length; i++) {
-      bars[i].style.height = (dataArray[i] / 2) + 'px';
+      bars[i].style.height = (dataArray[i] / 4) + 'px';
     }
   }
 
