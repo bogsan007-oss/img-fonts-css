@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Обработчик клика по кнопке
   playerBtn.addEventListener("click", function() {
+console.log(playerBtn);
 
     if (!playerPlaying) {
       // Запуск музыки
