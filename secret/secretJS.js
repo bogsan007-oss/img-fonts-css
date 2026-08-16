@@ -42,12 +42,12 @@ console.log(playerBtn);
 });
 /* === ВИЗУАЛИЗАТОР ПОД МУЗЫКУ === */
 
-const audio = document.getElementById('audio-player');
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-const source = audioCtx.createMediaElementSource(audio);
-
 const analyser = audioCtx.createAnalyser();
-analyser.fftSize = 64;
+analyser.fftSize = 64; // 32 столбика
+
+// ПОДКЛЮЧАЕМ ТВОЙ ПЛЕЕР, а не DOM-аудио
+const source = audioCtx.createMediaElementSource(playerAudio);
 
 source.connect(analyser);
 analyser.connect(audioCtx.destination);
@@ -60,13 +60,12 @@ function animateBars() {
     analyser.getByteFrequencyData(dataArray);
 
     for (let i = 0; i < bars.length; i++) {
-        const value = dataArray[i];
-        bars[i].style.height = (value / 2) + 'px';
+        bars[i].style.height = (dataArray[i] / 2) + 'px';
     }
 }
 
-audio.addEventListener('play', () => {
+// Запуск визуализатора при старте музыки
+playerAudio.addEventListener('play', () => {
     audioCtx.resume();
     animateBars();
 });
-
