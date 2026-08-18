@@ -1,5 +1,6 @@
 // === ГЛОБАЛЬНЫЙ ПЛЕЕР ===
-const playerAudio = new Audio("https://bogsan007-oss.github.io/img-fonts-css/assets/Music/Piem_sa_Sashu.mp3");
+const playerAudio = document.getElementById("player"); // ИСПОЛЬЗУЕМ HTML <audio>
+playerAudio.src = "https://bogsan007-oss.github.io/img-fonts-css/assets/Music/Piem_sa_Sashu.mp3";
 let playerPlaying = false;
 
 // === ПЛЕЙ/ПАУЗА ===
@@ -97,6 +98,7 @@ let currentTrack = 0;
 function playTrack(index) {
   currentTrack = index;
   playerAudio.src = playlist[index].src;
+  playerAudio.load();   // ВАЖНО
   playerAudio.play();
 
   // название трека на табличке
