@@ -91,3 +91,41 @@ playerAudio.addEventListener('play', () => {
 });
 
 });
+// === ПЛЕЙЛИСТ ===
+const playlist = [
+    { title: "Трек 1", src: "https://files.catbox.moe/wmwbx7.mp3", local: false },
+    { title: "Трек 2", src: "https://files.catbox.moe/ybtx66.mp3", local: false },
+    { title: "Трек 3", src: "https://files.catbox.moe/2narmt.mp3", local: false }
+];
+
+let currentTrack = 0;
+
+// === АУДИО-ПЛЕЕР ===
+const audio = document.querySelector('#player'); // <audio id="player"></audio>
+
+// === ФУНКЦИЯ ПРОИГРЫВАНИЯ ТРЕКА ===
+function playTrack(index) {
+    currentTrack = index;
+    audio.src = playlist[index].src;
+    audio.play();
+
+    // подсветка активного трека (если нужно)
+    document.querySelectorAll('.track').forEach(t => t.classList.remove('active-track'));
+    document.querySelector(`.track[data-index="${index}"]`).classList.add('active-track');
+}
+
+// === КЛИК ПО СТРОКЕ ТРЕКА ===
+document.querySelectorAll('.track').forEach(track => {
+    track.addEventListener('click', () => {
+        const index = Number(track.dataset.index);
+        playTrack(index);
+    });
+});
+
+// === АВТОПЕРЕХОД НА СЛЕДУЮЩИЙ ТРЕК ===
+audio.addEventListener('ended', () => {
+    currentTrack++;
+    if (currentTrack >= playlist.length) currentTrack = 0;
+    playTrack(currentTrack);
+});
+
