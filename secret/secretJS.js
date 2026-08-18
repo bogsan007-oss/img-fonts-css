@@ -107,6 +107,12 @@ document.addEventListener("DOMContentLoaded", function() {
       currentTrack = index;
       playerAudio.src = playlist[index].src;
       playerAudio.play();
+    // ⭐ Меняем название трека на табличке
+    document.getElementById('current-track-name').textContent = playlist[index].title;
+
+    // подсветка активного трека
+    document.querySelectorAll('.track').forEach(t => t.classList.remove('active-track'));
+    document.querySelector(`.track[data-index="${index}"]`).classList.add('active-track');
 
       document.querySelectorAll('.track').forEach(t => t.classList.remove('active-track'));
       document.querySelector(`.track[data-index="${index}"]`).classList.add('active-track');
