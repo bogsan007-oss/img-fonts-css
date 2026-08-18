@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // Кнопка
   const playerBtn = document.querySelector("#play-icon img");
 
-  // Аудио-файл
+  // Аудио-файл (ОСНОВНОЙ ПЛЕЕР)
   const playerAudio = new Audio("https://bogsan007-oss.github.io/img-fonts-css/assets/Music/Piem_sa_Sashu.mp3");
 
   let playerPlaying = false;
@@ -54,78 +54,75 @@ document.addEventListener("DOMContentLoaded", function() {
     audioCtx.resume();
     animateBars();
   });
-/* === ДВУСТОРОННИЙ ВИЗУАЛИЗАТОР === */
 
-const leftBar  = document.querySelector('.left-bar');
-const rightBar = document.querySelector('.right-bar');
 
-const audioCtx2 = new (window.AudioContext || window.webkitAudioContext)();
-const analyser2 = audioCtx2.createAnalyser();
-analyser2.fftSize = 64;
+  /* === ДВУСТОРОННИЙ ВИЗУАЛИЗАТОР === */
 
-const source2 = audioCtx2.createMediaElementSource(playerAudio);
-source2.connect(analyser2);
-analyser2.connect(audioCtx2.destination);
+  const leftBar  = document.querySelector('.left-bar');
+  const rightBar = document.querySelector('.right-bar');
 
-const freqData = new Uint8Array(analyser2.frequencyBinCount);
+  const audioCtx2 = new (window.AudioContext || window.webkitAudioContext)();
+  const analyser2 = audioCtx2.createAnalyser();
+  analyser2.fftSize = 64;
 
-function animateDual() {
-    requestAnimationFrame(animateDual);
-    analyser2.getByteFrequencyData(freqData);
+  const source2 = audioCtx2.createMediaElementSource(playerAudio);
+  source2.connect(analyser2);
+  analyser2.connect(audioCtx2.destination);
 
-    // Берём среднюю частоту — она даёт ровный "дыхательный" эффект
-    let avg = 0;
-    for (let i = 0; i < freqData.length; i++) avg += freqData[i];
-    avg = avg / freqData.length;
+  const freqData = new Uint8Array(analyser2.frequencyBinCount);
 
-    // Уменьшаем амплитуду (делим на 3)
-    const width = avg / 8;
+  function animateDual() {
+      requestAnimationFrame(animateDual);
+      analyser2.getByteFrequencyData(freqData);
 
-    leftBar.style.width  = width + 'px';
-    rightBar.style.width = width + 'px';
-}
+      let avg = 0;
+      for (let i = 0; i < freqData.length; i++) avg += freqData[i];
+      avg = avg / freqData.length;
 
-playerAudio.addEventListener('play', () => {
-    audioCtx2.resume();
-    animateDual();
+      const width = avg / 8;
+
+      leftBar.style.width  = width + 'px';
+      rightBar.style.width = width + 'px';
+  }
+
+  playerAudio.addEventListener('play', () => {
+      audioCtx2.resume();
+      animateDual();
+  });
+
+
+  // =====================================
+  // === ПЛЕЙЛИСТ (ПОДКЛЮЧАЕМ К playerAudio)
+  // =====================================
+
+  const playlist = [
+      { title: "Трек 1", src: "https://files.catbox.moe/wmwbx7.mp3" },
+      { title: "Трек 2", src: "https://files.catbox.moe/ybtx66.mp3" },
+      { title: "Трек 3", src: "https://files.catbox.moe/2narmt.mp3" }
+  ];
+
+  let currentTrack = 0;
+
+  function playTrack(index) {
+      currentTrack = index;
+      playerAudio.src = playlist[index].src;
+      playerAudio.play();
+
+      document.querySelectorAll('.track').forEach(t => t.classList.remove('active-track'));
+      document.querySelector(`.track[data-index="${index}"]`).classList.add('active-track');
+  }
+
+  document.querySelectorAll('.track').forEach(track => {
+      track.addEventListener('click', () => {
+          const index = Number(track.dataset.index);
+          playTrack(index);
+      });
+  });
+
+  playerAudio.addEventListener('ended', () => {
+      currentTrack++;
+      if (currentTrack >= playlist.length) currentTrack = 0;
+      playTrack(currentTrack);
+  });
+
 });
-
-});
-// === ПЛЕЙЛИСТ ===
-const playlist = [
-    { title: "Трек 1", src: "https://files.catbox.moe/wmwbx7.mp3", local: false },
-    { title: "Трек 2", src: "https://files.catbox.moe/ybtx66.mp3", local: false },
-    { title: "Трек 3", src: "https://files.catbox.moe/2narmt.mp3", local: false }
-];
-
-let currentTrack = 0;
-
-// === АУДИО-ПЛЕЕР ===
-const audio = document.querySelector('#player'); // <audio id="player"></audio>
-
-// === ФУНКЦИЯ ПРОИГРЫВАНИЯ ТРЕКА ===
-function playTrack(index) {
-    currentTrack = index;
-    audio.src = playlist[index].src;
-    audio.play();
-
-    // подсветка активного трека (если нужно)
-    document.querySelectorAll('.track').forEach(t => t.classList.remove('active-track'));
-    document.querySelector(`.track[data-index="${index}"]`).classList.add('active-track');
-}
-
-// === КЛИК ПО СТРОКЕ ТРЕКА ===
-document.querySelectorAll('.track').forEach(track => {
-    track.addEventListener('click', () => {
-        const index = Number(track.dataset.index);
-        playTrack(index);
-    });
-});
-
-// === АВТОПЕРЕХОД НА СЛЕДУЮЩИЙ ТРЕК ===
-audio.addEventListener('ended', () => {
-    currentTrack++;
-    if (currentTrack >= playlist.length) currentTrack = 0;
-    playTrack(currentTrack);
-});
-
