@@ -1,5 +1,6 @@
 // === ГЛОБАЛЬНЫЙ ПЛЕЕР ===
-const playerAudio = document.getElementById("player"); // ИСПОЛЬЗУЕМ HTML <audio>
+// Используем HTML <audio id="player">, а не создаём новый!
+const playerAudio = document.getElementById("player");
 playerAudio.src = "https://bogsan007-oss.github.io/img-fonts-css/assets/Music/Piem_sa_Sashu.mp3";
 let playerPlaying = false;
 
@@ -20,9 +21,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
-
   /* === ВИЗУАЛИЗАТОР ПОД МУЗЫКУ === */
-
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   const analyser = audioCtx.createAnalyser();
   analyser.fftSize = 64;
@@ -48,9 +47,7 @@ document.addEventListener("DOMContentLoaded", function() {
     animateBars();
   });
 
-
   /* === ДВУСТОРОННИЙ ВИЗУАЛИЗАТОР === */
-
   const leftBar  = document.querySelector('.left-bar');
   const rightBar = document.querySelector('.right-bar');
 
@@ -85,7 +82,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 
-
 // === ПЛЕЙЛИСТ ===
 const playlist = [
   { title: "Трек 1", src: "https://files.catbox.moe/wmwbx7.mp3" },
@@ -98,19 +94,16 @@ let currentTrack = 0;
 function playTrack(index) {
   currentTrack = index;
   playerAudio.src = playlist[index].src;
-  playerAudio.load();   // ВАЖНО
+  playerAudio.load();
   playerAudio.play();
 
-  // название трека на табличке
   const nameBox = document.getElementById('current-track-name');
   if (nameBox) nameBox.textContent = playlist[index].title;
 
-  // подсветка активного трека
   document.querySelectorAll('.track').forEach(t => t.classList.remove('active-track'));
   document.querySelector(`.track[data-index="${index}"]`).classList.add('active-track');
 }
 
-// клики по трекам
 document.querySelectorAll('.track').forEach(track => {
   track.addEventListener('click', () => {
     const index = Number(track.dataset.index);
@@ -118,7 +111,6 @@ document.querySelectorAll('.track').forEach(track => {
   });
 });
 
-// автопереход
 playerAudio.addEventListener('ended', () => {
   currentTrack++;
   if (currentTrack >= playlist.length) currentTrack = 0;
