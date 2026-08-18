@@ -1,4 +1,12 @@
 // =====================================
+// === СОЗДАЁМ ПЛЕЕР СРАЗУ (ГЛОБАЛЬНО) ===
+// =====================================
+
+const playerAudio = new Audio("https://bogsan007-oss.github.io/img-fonts-css/assets/Music/Piem_sa_Sashu.mp3");
+let playerPlaying = false;
+
+
+// =====================================
 // === SCRIPT: PLAYER MAIN (Плей/Пауза) ===
 // =====================================
 
@@ -6,11 +14,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Кнопка
   const playerBtn = document.querySelector("#play-icon img");
-
-  // Аудио-файл (ОСНОВНОЙ ПЛЕЕР)
-  const playerAudio = new Audio("https://bogsan007-oss.github.io/img-fonts-css/assets/Music/Piem_sa_Sashu.mp3");
-
-  let playerPlaying = false;
 
   playerBtn.addEventListener("click", function() {
 
@@ -90,45 +93,44 @@ document.addEventListener("DOMContentLoaded", function() {
       animateDual();
   });
 
+});
 
-  // =====================================
-  // === ПЛЕЙЛИСТ (ПОДКЛЮЧАЕМ К playerAudio)
-  // =====================================
 
-  const playlist = [
-      { title: "Трек 1", src: "https://files.catbox.moe/wmwbx7.mp3" },
-      { title: "Трек 2", src: "https://files.catbox.moe/ybtx66.mp3" },
-      { title: "Трек 3", src: "https://files.catbox.moe/2narmt.mp3" }
-  ];
+// =====================================
+// === ПЛЕЙЛИСТ (ТЕПЕРЬ РАБОТАЕТ) ===
+// =====================================
 
-  let currentTrack = 0;
+const playlist = [
+    { title: "Трек 1", src: "https://files.catbox.moe/wmwbx7.mp3" },
+    { title: "Трек 2", src: "https://files.catbox.moe/ybtx66.mp3" },
+    { title: "Трек 3", src: "https://files.catbox.moe/2narmt.mp3" }
+];
 
-  function playTrack(index) {
-      currentTrack = index;
-      playerAudio.src = playlist[index].src;
-      playerAudio.play();
-    // ⭐ Меняем название трека на табличке
-    document.getElementById('current-track-name').textContent = playlist[index].title;
+let currentTrack = 0;
 
-    // подсветка активного трека
+function playTrack(index) {
+    currentTrack = index;
+    playerAudio.src = playlist[index].src;
+    playerAudio.play();
+
+    // название трека на табличке
+    const nameBox = document.getElementById('current-track-name');
+    if (nameBox) nameBox.textContent = playlist[index].title;
+
+    // подсветка
     document.querySelectorAll('.track').forEach(t => t.classList.remove('active-track'));
     document.querySelector(`.track[data-index="${index}"]`).classList.add('active-track');
+}
 
-      document.querySelectorAll('.track').forEach(t => t.classList.remove('active-track'));
-      document.querySelector(`.track[data-index="${index}"]`).classList.add('active-track');
-  }
+document.querySelectorAll('.track').forEach(track => {
+    track.addEventListener('click', () => {
+        const index = Number(track.dataset.index);
+        playTrack(index);
+    });
+});
 
-  document.querySelectorAll('.track').forEach(track => {
-      track.addEventListener('click', () => {
-          const index = Number(track.dataset.index);
-          playTrack(index);
-      });
-  });
-
-  playerAudio.addEventListener('ended', () => {
-      currentTrack++;
-      if (currentTrack >= playlist.length) currentTrack = 0;
-      playTrack(currentTrack);
-  });
-
+playerAudio.addEventListener('ended', () => {
+    currentTrack++;
+    if (currentTrack >= playlist.length) currentTrack = 0;
+    playTrack(currentTrack);
 });
