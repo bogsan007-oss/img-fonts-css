@@ -1,3 +1,4 @@
+console.log("JS загружен!");
 // === ГЛОБАЛЬНЫЙ ПЛЕЕР ===
 const playerAudio = document.getElementById("player");
 let playerPlaying = false;
