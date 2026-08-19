@@ -60,14 +60,22 @@ function animate() {
     rightBar.style.width = width + 'px';
 }
 
-// === ПЛЕЙ/ПАУЗА ===
+// === ПРИ ЗАГРУЗКЕ СТРАНИЦЫ — СТАВИМ ПЕРВЫЙ ТРЕК ===
 document.addEventListener("DOMContentLoaded", function() {
 
+    // ставим трек в плеер, но НЕ запускаем звук
+    playerAudio.src = playlist[0].src;
+    currentTrack = 0;
+
+    const nameBox = document.getElementById('current-track-name');
+    if (nameBox) nameBox.textContent = playlist[0].title;
+
+    // === ПЛЕЙ/ПАУЗА ===
     const playerBtn = document.querySelector("#play-icon img");
 
     playerBtn.addEventListener("click", function() {
 
-        startAudioEngine(); // ← запуск движка ТОЛЬКО здесь
+        startAudioEngine(); // движок запускается ТОЛЬКО здесь
 
         if (!playerPlaying) {
             playerAudio.play();
@@ -93,8 +101,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // === ПРОИГРЫВАНИЕ ТРЕКА ===
 function playTrack(index) {
-
-    // ❗ Убрано startAudioEngine() — иначе Firefox блокирует звук
 
     currentTrack = index;
     playerAudio.src = playlist[index].src;
