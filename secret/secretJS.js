@@ -1,86 +1,6 @@
 // === ГЛОБАЛЬНЫЙ ПЛЕЕР ===
-// Используем HTML <audio id="player">, а не создаём новый!
 const playerAudio = document.getElementById("player");
-playerAudio.src = "https://bogsan007-oss.github.io/img-fonts-css/assets/Music/Piem_sa_Sashu.mp3";
 let playerPlaying = false;
-
-// === ПЛЕЙ/ПАУЗА ===
-document.addEventListener("DOMContentLoaded", function() {
-
-  const playerBtn = document.querySelector("#play-icon img");
-
-  playerBtn.addEventListener("click", function() {
-    if (!playerPlaying) {
-      playerAudio.play();
-      playerBtn.src = "https://bogsan007-oss.github.io/img-fonts-css/secret/img/2-p.webp";
-      playerPlaying = true;
-    } else {
-      playerAudio.pause();
-      playerBtn.src = "https://bogsan007-oss.github.io/img-fonts-css/secret/img/3-p.webp";
-      playerPlaying = false;
-    }
-  });
-
-  /* === ВИЗУАЛИЗАТОР ПОД МУЗЫКУ === */
-  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  const analyser = audioCtx.createAnalyser();
-  analyser.fftSize = 64;
-
-  const source = audioCtx.createMediaElementSource(playerAudio);
-  source.connect(analyser);
-  analyser.connect(audioCtx.destination);
-
-  const dataArray = new Uint8Array(analyser.frequencyBinCount);
-  const bars = document.querySelectorAll('#visualizer .bar');
-
-  function animateBars() {
-    requestAnimationFrame(animateBars);
-    analyser.getByteFrequencyData(dataArray);
-
-    for (let i = 0; i < bars.length; i++) {
-      bars[i].style.height = (dataArray[i] / 4) + 'px';
-    }
-  }
-
-  playerAudio.addEventListener('play', () => {
-    audioCtx.resume();
-    animateBars();
-  });
-
-  /* === ДВУСТОРОННИЙ ВИЗУАЛИЗАТОР === */
-  const leftBar  = document.querySelector('.left-bar');
-  const rightBar = document.querySelector('.right-bar');
-
-  const audioCtx2 = new (window.AudioContext || window.webkitAudioContext)();
-  const analyser2 = audioCtx2.createAnalyser();
-  analyser2.fftSize = 64;
-
-  const source2 = audioCtx2.createMediaElementSource(playerAudio);
-  source2.connect(analyser2);
-  analyser2.connect(audioCtx2.destination);
-
-  const freqData = new Uint8Array(analyser2.frequencyBinCount);
-
-  function animateDual() {
-      requestAnimationFrame(animateDual);
-      analyser2.getByteFrequencyData(freqData);
-
-      let avg = 0;
-      for (let i = 0; i < freqData.length; i++) avg += freqData[i];
-      avg = avg / freqData.length;
-
-      const width = avg / 8;
-
-      leftBar.style.width  = width + 'px';
-      rightBar.style.width = width + 'px';
-  }
-
-  playerAudio.addEventListener('play', () => {
-      audioCtx2.resume();
-      animateDual();
-  });
-
-});
 
 // === ПЛЕЙЛИСТ ===
 const playlist = [
@@ -91,28 +11,94 @@ const playlist = [
 
 let currentTrack = 0;
 
-function playTrack(index) {
-  currentTrack = index;
-  playerAudio.src = playlist[index].src;
-  playerAudio.load();
-  playerAudio.play();
+// === ОДИН AudioContext ДЛЯ ВСЕГО ===
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+const analyser = audioCtx.createAnalyser();
+analyser.fftSize = 64;
 
-  const nameBox = document.getElementById('current-track-name');
-  if (nameBox) nameBox.textContent = playlist[index].title;
+const source = audioCtx.createMediaElementSource(playerAudio);
+source.connect(analyser);
+analyser.connect(audioCtx.destination);
 
-  document.querySelectorAll('.track').forEach(t => t.classList.remove('active-track'));
-  document.querySelector(`.track[data-index="${index}"]`).classList.add('active-track');
+const freqData = new Uint8Array(analyser.frequencyBinCount);
+
+// === ВИЗУАЛИЗАТОР PNG-БАРОВ ===
+const bars = document.querySelectorAll('#visualizer .bar');
+
+// === ДВУСТОРОННИЙ ВИЗУАЛИЗАТОР ===
+const leftBar  = document.querySelector('.left-bar');
+const rightBar = document.querySelector('.right-bar');
+
+// === АНИМАЦИЯ ВСЕХ ВИЗУАЛИЗАТОРОВ ===
+function animate() {
+    requestAnimationFrame(animate);
+    analyser.getByteFrequencyData(freqData);
+
+    // --- PNG-бары ---
+    for (let i = 0; i < bars.length; i++) {
+        const val = freqData[i] / 255; // нормализуем 0..1
+        bars[i].style.transform = `scaleY(${val})`;
+    }
+
+    // --- Двусторонний визуализатор ---
+    let avg = 0;
+    for (let i = 0; i < freqData.length; i++) avg += freqData[i];
+    avg = avg / freqData.length;
+
+    const width = avg / 6; // плавная ширина
+    leftBar.style.width  = width + 'px';
+    rightBar.style.width = width + 'px';
 }
 
-document.querySelectorAll('.track').forEach(track => {
-  track.addEventListener('click', () => {
-    const index = Number(track.dataset.index);
-    playTrack(index);
-  });
+// === ПЛЕЙ/ПАУЗА ===
+document.addEventListener("DOMContentLoaded", function() {
+
+    const playerBtn = document.querySelector("#play-icon img");
+
+    playerBtn.addEventListener("click", function() {
+        if (!playerPlaying) {
+            playerAudio.play();
+            playerBtn.src = "https://bogsan007-oss.github.io/img-fonts-css/secret/img/2-p.webp";
+            playerPlaying = true;
+            audioCtx.resume();
+        } else {
+            playerAudio.pause();
+            playerBtn.src = "https://bogsan007-oss.github.io/img-fonts-css/secret/img/3-p.webp";
+            playerPlaying = false;
+        }
+    });
+
+    animate(); // запускаем визуализацию один раз
 });
 
+// === ФУНКЦИЯ ПРОИГРЫВАНИЯ ТРЕКА ===
+function playTrack(index) {
+    currentTrack = index;
+    playerAudio.src = playlist[index].src;
+    playerAudio.load();
+    playerAudio.play();
+    audioCtx.resume();
+
+    // Название трека
+    const nameBox = document.getElementById('current-track-name');
+    if (nameBox) nameBox.textContent = playlist[index].title;
+
+    // Активный трек
+    document.querySelectorAll('.track').forEach(t => t.classList.remove('active-track'));
+    document.querySelector(`.track[data-index="${index}"]`).classList.add('active-track');
+}
+
+// === КЛИК ПО ПЛЕЙЛИСТУ ===
+document.querySelectorAll('.track').forEach(track => {
+    track.addEventListener('click', () => {
+        const index = Number(track.dataset.index);
+        playTrack(index);
+    });
+});
+
+// === АВТОПЕРЕКЛЮЧЕНИЕ ===
 playerAudio.addEventListener('ended', () => {
-  currentTrack++;
-  if (currentTrack >= playlist.length) currentTrack = 0;
-  playTrack(currentTrack);
+    currentTrack++;
+    if (currentTrack >= playlist.length) currentTrack = 0;
+    playTrack(currentTrack);
 });
