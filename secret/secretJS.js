@@ -87,6 +87,11 @@ function playTrack(index) {
     // Активный трек
     document.querySelectorAll('.track').forEach(t => t.classList.remove('active-track'));
     document.querySelector(`.track[data-index="${index}"]`).classList.add('active-track');
+   // синхронизируем кнопку
+const playerBtn = document.querySelector("#play-icon img");
+    playerBtn.src = "https://bogsan007-oss.github.io/img-fonts-css/secret/img/2-p.webp";
+    playerPlaying = true;
+
 }
 
 // === КЛИК ПО ПЛЕЙЛИСТУ ===
