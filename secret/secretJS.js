@@ -6,7 +6,7 @@ let playerPlaying = false;
 
 // === ПЛЕЙЛИСТ ===
 const playlist = [
-  { title: "Трек 1", src: "https://raw.githubusercontent.com/bogsan007-oss/img-fonts-css/main/assets/Music/Piem_sa_Sashu.mp3" },
+  { title: "Трек 1", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
   { title: "Трек 2", src: "https://files.catbox.moe/ybtx66.mp3" },
   { title: "Трек 3", src: "https://files.catbox.moe/2narmt.mp3" }
 ];
