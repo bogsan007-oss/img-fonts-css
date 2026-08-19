@@ -60,20 +60,22 @@ function animate() {
     rightBar.style.width = width + 'px';
 }
 
-// === ПРИ ЗАГРУЗКЕ СТРАНИЦЫ — СТАВИМ ПЕРВЫЙ ТРЕК ===
+// === ПРИ ЗАГРУЗКЕ СТРАНИЦЫ — СТАВИМ ПЕРВЫЙ ТРЕК (НЕ ИГРАЕТ!) ===
 document.addEventListener("DOMContentLoaded", function() {
 
     currentTrack = 0;
-    playerAudio.src = playlist[0].src;
+    playerAudio.src = playlist[0].src;   // просто ставим трек
+    playerPlaying = false;
 
     const nameBox = document.getElementById('current-track-name');
     if (nameBox) nameBox.textContent = playlist[0].title;
 
     const playerBtn = document.querySelector("#play-icon img");
 
+    // === КНОПКА PLAY ===
     playerBtn.addEventListener("click", function() {
 
-        startAudioEngine();
+        startAudioEngine(); // движок запускается ТОЛЬКО здесь
 
         if (!playerPlaying) {
             playerAudio.play();
@@ -87,6 +89,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
+    // === КЛИК ПО ТРЕКАМ ===
     document.querySelectorAll('.track').forEach(track => {
         track.addEventListener('click', () => {
             const index = Number(track.dataset.index);
@@ -99,9 +102,11 @@ document.addEventListener("DOMContentLoaded", function() {
 // === ПРОИГРЫВАНИЕ ТРЕКА ===
 function playTrack(index) {
 
+    startAudioEngine(); // запуск движка ТОЛЬКО при клике
+
     currentTrack = index;
     playerAudio.src = playlist[index].src;
-    playerAudio.play();   // load() УБРАНО
+    playerAudio.play();   // НЕТ load(), НЕТ автозапуска
 
     if (audioCtx) audioCtx.resume();
 
