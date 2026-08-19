@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     playerBtn.addEventListener("click", function() {
 
-        startAudioEngine();
+        startAudioEngine(); // ← запуск движка ТОЛЬКО здесь
 
         if (!playerPlaying) {
             playerAudio.play();
@@ -94,13 +94,14 @@ document.addEventListener("DOMContentLoaded", function() {
 // === ПРОИГРЫВАНИЕ ТРЕКА ===
 function playTrack(index) {
 
-    startAudioEngine();
+    // ❗ Убрано startAudioEngine() — иначе Firefox блокирует звук
 
     currentTrack = index;
     playerAudio.src = playlist[index].src;
     playerAudio.load();
     playerAudio.play();
-    audioCtx.resume();
+
+    if (audioCtx) audioCtx.resume(); // если движок уже запущен — продолжаем
 
     const nameBox = document.getElementById('current-track-name');
     if (nameBox) nameBox.textContent = playlist[index].title;
