@@ -63,25 +63,23 @@ function animate() {
 // === ПРИ ЗАГРУЗКЕ СТРАНИЦЫ — СТАВИМ ПЕРВЫЙ ТРЕК ===
 document.addEventListener("DOMContentLoaded", function() {
 
-    // ставим трек в плеер, но НЕ запускаем звук
-    playerAudio.src = playlist[0].src;
     currentTrack = 0;
+    playerAudio.src = playlist[0].src;
 
     const nameBox = document.getElementById('current-track-name');
     if (nameBox) nameBox.textContent = playlist[0].title;
 
-    // === ПЛЕЙ/ПАУЗА ===
     const playerBtn = document.querySelector("#play-icon img");
 
     playerBtn.addEventListener("click", function() {
 
-        startAudioEngine(); // движок запускается ТОЛЬКО здесь
+        startAudioEngine();
 
         if (!playerPlaying) {
             playerAudio.play();
             playerBtn.src = "https://bogsan007-oss.github.io/img-fonts-css/secret/img/2-p.webp";
             playerPlaying = true;
-            audioCtx.resume();
+            if (audioCtx) audioCtx.resume();
         } else {
             playerAudio.pause();
             playerBtn.src = "https://bogsan007-oss.github.io/img-fonts-css/secret/img/3-p.webp";
@@ -89,7 +87,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // === КЛИК ПО ТРЕКАМ ===
     document.querySelectorAll('.track').forEach(track => {
         track.addEventListener('click', () => {
             const index = Number(track.dataset.index);
@@ -104,10 +101,9 @@ function playTrack(index) {
 
     currentTrack = index;
     playerAudio.src = playlist[index].src;
-    playerAudio.load();
-    playerAudio.play();
+    playerAudio.play();   // load() УБРАНО
 
-    if (audioCtx) audioCtx.resume(); // если движок уже запущен — продолжаем
+    if (audioCtx) audioCtx.resume();
 
     const nameBox = document.getElementById('current-track-name');
     if (nameBox) nameBox.textContent = playlist[index].title;
