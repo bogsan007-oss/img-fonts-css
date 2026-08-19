@@ -74,6 +74,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // === ФУНКЦИЯ ПРОИГРЫВАНИЯ ТРЕКА ===
 function playTrack(index) {
+    startAudioEngine();
     currentTrack = index;
     playerAudio.src = playlist[index].src;
     playerAudio.load();
