@@ -13,19 +13,23 @@ const playlist = [
 
 let currentTrack = 0;
 
-// === AudioContext создаём ТОЛЬКО после клика ===
+// === AudioContext ===
 let audioCtx = null;
 let analyser = null;
 let freqData = null;
+let sourceNode = null;
 
-function startAudioEngine() {
+function initAudioEngine() {
     if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
         analyser = audioCtx.createAnalyser();
         analyser.fftSize = 64;
 
-        const source = audioCtx.createMediaElementSource(playerAudio);
-        source.connect(analyser);
+        sourceNode = audioCtx.createMediaElementSource(playerAudio);
+
+        // ПОДКЛЮЧАЕМ ПРАВИЛЬНО
+        sourceNode.connect(analyser);
         analyser.connect(audioCtx.destination);
 
         freqData = new Uint8Array(analyser.frequencyBinCount);
@@ -60,12 +64,11 @@ function animate() {
     rightBar.style.width = width + 'px';
 }
 
-// === ПРИ ЗАГРУЗКЕ СТРАНИЦЫ — СТАВИМ ПЕРВЫЙ ТРЕК (НЕ ИГРАЕТ!) ===
+// === ПРИ ЗАГРУЗКЕ СТРАНИЦЫ — СТАВИМ ПЕРВЫЙ ТРЕК ===
 document.addEventListener("DOMContentLoaded", function() {
 
     currentTrack = 0;
-    playerAudio.src = playlist[0].src;   // просто ставим трек
-    playerPlaying = false;
+    playerAudio.src = playlist[0].src;
 
     const nameBox = document.getElementById('current-track-name');
     if (nameBox) nameBox.textContent = playlist[0].title;
@@ -75,13 +78,14 @@ document.addEventListener("DOMContentLoaded", function() {
     // === КНОПКА PLAY ===
     playerBtn.addEventListener("click", function() {
 
-        startAudioEngine(); // движок запускается ТОЛЬКО здесь
+        initAudioEngine(); // ← запуск движка
 
         if (!playerPlaying) {
+            audioCtx.resume();
             playerAudio.play();
+
             playerBtn.src = "https://bogsan007-oss.github.io/img-fonts-css/secret/img/2-p.webp";
             playerPlaying = true;
-            if (audioCtx) audioCtx.resume();
         } else {
             playerAudio.pause();
             playerBtn.src = "https://bogsan007-oss.github.io/img-fonts-css/secret/img/3-p.webp";
@@ -102,13 +106,13 @@ document.addEventListener("DOMContentLoaded", function() {
 // === ПРОИГРЫВАНИЕ ТРЕКА ===
 function playTrack(index) {
 
-    startAudioEngine(); // запуск движка ТОЛЬКО при клике
+    initAudioEngine(); // ← движок запускается при клике
 
     currentTrack = index;
     playerAudio.src = playlist[index].src;
-    playerAudio.play();   // НЕТ load(), НЕТ автозапуска
 
-    if (audioCtx) audioCtx.resume();
+    audioCtx.resume();
+    playerAudio.play();
 
     const nameBox = document.getElementById('current-track-name');
     if (nameBox) nameBox.textContent = playlist[index].title;
