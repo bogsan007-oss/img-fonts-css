@@ -3,6 +3,7 @@ console.log("НОВЫЙ МОТОР ДЛЯ СЕКРЕТНОГО ПЛЕЕРА ЗА
 // === ЭЛЕМЕНТЫ ===
 const playBtn     = document.getElementById("player-circle");
 const playIcon    = document.getElementById("play-icon");
+const pauseIcon   = document.getElementById("pause-icon");
 const audioEl     = document.getElementById("player");
 
 const bars        = document.querySelectorAll("#visualizer .bar");
@@ -65,6 +66,8 @@ async function initEqForCatbox(url) {
 }
 
 function playCatboxBuffer() {
+    if (!catboxBuffer) return; // защита от пустого буфера
+
     if (sourceNode) sourceNode.disconnect();
 
     sourceNode = audioCtx.createBufferSource();
@@ -137,6 +140,7 @@ async function playMp3(index) {
 
         isPlaying = true;
         playIcon.style.opacity = 0;
+        pauseIcon.style.opacity = 1;
         return;
     }
 
@@ -146,6 +150,7 @@ async function playMp3(index) {
 
     isPlaying = true;
     playIcon.style.opacity = 0;
+    pauseIcon.style.opacity = 1;
 }
 
 // === PLAY/PAUSE ===
@@ -164,14 +169,22 @@ playBtn.addEventListener("click", async () => {
 
         if (!isPlaying) {
             userPaused = false;
-            playCatboxBuffer();
+
+            if (!catboxBuffer) {
+                await initEqForCatbox(playlist[currentTrack].src);
+            } else {
+                playCatboxBuffer();
+            }
+
             isPlaying = true;
             playIcon.style.opacity = 0;
+            pauseIcon.style.opacity = 1;
 
         } else {
             pauseCatbox();
             isPlaying = false;
             playIcon.style.opacity = 1;
+            pauseIcon.style.opacity = 0;
         }
 
         return;
@@ -183,12 +196,14 @@ playBtn.addEventListener("click", async () => {
         audioEl.play();
         isPlaying = true;
         playIcon.style.opacity = 0;
+        pauseIcon.style.opacity = 1;
 
     } else {
         userPaused = true;
         audioEl.pause();
         isPlaying = false;
         playIcon.style.opacity = 1;
+        pauseIcon.style.opacity = 0;
     }
 });
 
@@ -200,7 +215,7 @@ trackEls.forEach(track => {
     });
 });
 
-// === ОТКЛЮЧЕНО: ПЛЕЙЛИСТ НЕ ВЫЕЗЖАЕТ И НЕ СКРЫВАЕТСЯ ===
+// === ПЛЕЙЛИСТ НЕ ВЫЕЗЖАЕТ ===
 // playlistBtn.addEventListener("click", () => {
 //     playlistBox.classList.toggle("open");
 // });
@@ -233,3 +248,6 @@ function playNextTrack() {
 
     playMp3(currentTrack);
 }
+
+// === АВТОЗАГРУЗКА ПЕРВОГО ТРЕКА ===
+playMp3(0);
