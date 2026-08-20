@@ -1,54 +1,42 @@
-console.log("НОВЫЙ МОТОР ЗАГРУЖЕН");
+console.log("НОВЫЙ МОТОР ДЛЯ СЕКРЕТНОГО ПЛЕЕРА ЗАГРУЖЕН");
 
 // === ЭЛЕМЕНТЫ ===
-const btn        = document.querySelector(".player-btn");
-const icon       = document.getElementById("player-icon");
-const audioEl    = document.getElementById("radio-audio");
+const playBtn     = document.getElementById("player-circle");
+const playIcon    = document.getElementById("play-icon");
+const audioEl     = document.getElementById("player");
 
-const bars  = document.querySelectorAll(".eq-bar");
-const barsH = document.querySelectorAll(".eq-bar-h");
+const bars        = document.querySelectorAll("#visualizer .bar");
+const leftBar     = document.querySelector("#dual-visualizer .left-bar");
+const rightBar    = document.querySelector("#dual-visualizer .right-bar");
 
-const playlistEl = document.querySelector(".playlist");
+const playlistBox = document.querySelector(".playlist-box");
+const playlistBtn = document.querySelector(".btn-playlist");
+const trackEls    = document.querySelectorAll(".track");
 
-// === КНОПКИ РАДИО ===
-const shansonBtn = document.querySelector(".SHanson-btn");
-const rodnixBtn  = document.querySelector(".rodnix_dorog-btn");
-const novoeBtn   = document.querySelector(".novoe_radio-btn");
-const avtoradioBtn   = document.querySelector(".avtoradio-btn");
+const trackNameEl = document.getElementById("current-track-name");
 
 // === ПЛЕЙЛИСТ ===
 const playlist = [
-    { title: "Трек 1", src: "https://files.catbox.moe/wmwbx7.mp3", local: false},
-    { title: "Трек 2", src: "https://files.catbox.moe/ybtx66.mp3", local: false},
-    { title: "Трек 3", src: "https://files.catbox.moe/2narmt.mp3", local: false}
+    { title: "Трек 1", src: "https://files.catbox.moe/wmwbx7.mp3", local: false },
+    { title: "Трек 2", src: "https://files.catbox.moe/ybtx66.mp3", local: false },
+    { title: "Трек 3", src: "https://files.catbox.moe/2narmt.mp3", local: false }
 ];
 
 let currentTrack = 0;
 
-// === РАДИОСТАНЦИИ ===
-const radioStations = [
-    "https://chanson.hostingradio.ru:8041/chanson256.mp3",   // 0 — Шансон
-    "https://stream1.radiord.ru:8000/live128.mp3?e5f1",      // 1 — Родных дорог
-    "https://stream.newradio.ru/novoe96.aacp?9167",           // 2 — Новое радио
-	"https://pub0201.101.ru/stream/air/aac/64/100?7b4b6666"   // 3 - Авто радио
-];
-
-let currentRadio = 0;
-
 // === СОСТОЯНИЕ ===
 let mode = "playlist";
 let isPlaying = false;
+let userPaused = false;
 
 // === WEB AUDIO ===
 let audioCtx = null;
 let analyser = null;
 let sourceNode = null;
 let catboxBuffer = null;
+let catboxPausedAt = 0;
 
-// === ФЛАГ ПАУЗЫ (главное исправление)
-let userPaused = false;
-
-// === ЭКВАЛАЙЗЕР ДЛЯ ЛОКАЛЬНЫХ MP3 ===
+// === ИНИЦИАЛИЗАЦИЯ ЭКВАЛАЙЗЕРА ДЛЯ ЛОКАЛЬНЫХ MP3 ===
 function initEqForLocalMp3() {
     if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -63,7 +51,7 @@ function initEqForLocalMp3() {
     analyser.connect(audioCtx.destination);
 }
 
-// === ЭКВАЛАЙЗЕР ДЛЯ CATBOX MP3 ===
+// === CATBOX MP3 ===
 async function initEqForCatbox(url) {
     if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -75,6 +63,7 @@ async function initEqForCatbox(url) {
 
     playCatboxBuffer();
 }
+
 function playCatboxBuffer() {
     if (sourceNode) sourceNode.disconnect();
 
@@ -87,7 +76,6 @@ function playCatboxBuffer() {
     sourceNode.connect(analyser);
     analyser.connect(audioCtx.destination);
 
-    // если трек был на паузе — продолжаем с места остановки
     const offset = userPaused ? catboxPausedAt : 0;
     userPaused = false;
 
@@ -108,7 +96,7 @@ function pauseCatbox() {
     sourceNode = null;
 }
 
-// === АНИМАЦИЯ ЭКВАЛАЙЗЕРА ===
+// === АНИМАЦИЯ ОСНОВНОГО ВИЗУАЛИЗАТОРА ===
 function animateEq() {
     requestAnimationFrame(animateEq);
 
@@ -118,57 +106,19 @@ function animateEq() {
     analyser.getByteFrequencyData(dataArray);
 
     bars.forEach((bar, i) => {
-        bar.style.height = (dataArray[i] / 255) * 80 + "px";
+        bar.style.transform = `scaleY(${(dataArray[i] / 255) * 1.2})`;
     });
 
-    barsH.forEach((bar, i) => {
-        bar.style.transform = `scaleX(${dataArray[i] / 255})`;
-    });
+    // двойной визуализатор
+    if (leftBar && rightBar) {
+        const L = dataArray[5] / 255;
+        const R = dataArray[15] / 255;
+
+        leftBar.style.transform  = `scaleY(${L})`;
+        rightBar.style.transform = `scaleY(${R})`;
+    }
 }
 animateEq();
-
-// === ВИЗУАЛИЗАТОР РАДИО ===
-let visualEqActive = false;
-
-function startVisualEq() {
-    visualEqActive = true;
-
-    function animate() {
-        if (!visualEqActive) return;
-
-        if (!isPlaying || mode !== "radio") {
-            bars.forEach(bar => bar.style.height = "0px");
-            barsH.forEach(bar => bar.style.transform = "scaleX(0)");
-            requestAnimationFrame(animate);
-            return;
-        }
-
-        bars.forEach((bar, i) => {
-            let h;
-            if (i < 5) h = 15 + Math.random() * 15;
-            else if (i < 10) h = 10 + Math.random() * 20;
-            else h = 5 + Math.random() * 10;
-
-            bar.style.height = h + "px";
-        });
-
-        barsH.forEach((bar, i) => {
-            const scale = 0.4 + Math.random() * 0.6;
-            bar.style.transform = `scaleX(${scale})`;
-        });
-
-        setTimeout(() => requestAnimationFrame(animate), 80);
-    }
-
-    animate();
-}
-
-function stopVisualEq() {
-    visualEqActive = false;
-
-    bars.forEach(bar => bar.style.height = "0px");
-    barsH.forEach(bar => bar.style.transform = "scaleX(0)");
-}
 
 // === MP3 ===
 async function playMp3(index) {
@@ -178,7 +128,7 @@ async function playMp3(index) {
 
     const track = playlist[currentTrack];
 
-    stopVisualEq();
+    trackNameEl.textContent = track.title;
 
     if (track.local) {
         audioEl.src = track.src;
@@ -186,8 +136,7 @@ async function playMp3(index) {
         initEqForLocalMp3();
 
         isPlaying = true;
-        icon.src = "img/2-p.png";
-        icon.classList.add("pause-icon");
+        playIcon.style.opacity = 0; // скрыть play-иконку
         return;
     }
 
@@ -196,27 +145,11 @@ async function playMp3(index) {
     await initEqForCatbox(track.src);
 
     isPlaying = true;
-    icon.src = "img/2-p.png";
-    icon.classList.add("pause-icon");
+    playIcon.style.opacity = 0;
 }
 
-// === РАДИО ===
-function playRadio(index) {
-    mode = "radio";
-    currentRadio = index;
-
-    audioEl.src = radioStations[currentRadio];
-    audioEl.play();
-
-    analyser = null;
-    startVisualEq();
-
-    isPlaying = true;
-    icon.src = "img/2-p.png";
-    icon.classList.add("pause-icon");
-}
 // === PLAY/PAUSE ===
-btn.addEventListener("click", async () => {
+playBtn.addEventListener("click", async () => {
 
     if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -226,91 +159,51 @@ btn.addEventListener("click", async () => {
         await audioCtx.resume();
     }
 
-    // === ПЛЕЙЛИСТ CATBOX ===
+    // === CATBOX ===
     if (mode === "playlist" && !playlist[currentTrack].local) {
 
         if (!isPlaying) {
-            // запуск
             userPaused = false;
             playCatboxBuffer();
             isPlaying = true;
-
-            icon.src = "img/2-p.png";
-            icon.classList.add("pause-icon");
+            playIcon.style.opacity = 0;
 
         } else {
-            // пауза
             pauseCatbox();
             isPlaying = false;
-
-            icon.src = "img/3-p.png";
-            icon.classList.remove("pause-icon");
+            playIcon.style.opacity = 1;
         }
 
         return;
     }
 
-    // === ПЛЕЙЛИСТ обычные MP3 ===
+    // === Обычные MP3 ===
     if (!isPlaying) {
         userPaused = false;
         audioEl.play();
         isPlaying = true;
-
-        icon.src = "img/2-p.png";
-        icon.classList.add("pause-icon");
+        playIcon.style.opacity = 0;
 
     } else {
         userPaused = true;
         audioEl.pause();
         isPlaying = false;
-
-        icon.src = "img/3-p.png";
-        icon.classList.remove("pause-icon");
+        playIcon.style.opacity = 1;
     }
 });
 
 // === КЛИК ПО ТРЕКУ ===
-playlistEl.addEventListener("click", (e) => {
-    const li = e.target.closest("li");
-    if (!li) return;
-
-    const index = parseInt(li.dataset.index, 10);
-    playMp3(index);
+trackEls.forEach(track => {
+    track.addEventListener("click", () => {
+        const index = parseInt(track.dataset.index, 10);
+        playMp3(index);
+    });
 });
 
-// === КНОПКИ РАДИО ===
-if (shansonBtn) {
-    shansonBtn.addEventListener("click", () => {
-        playRadio(0);
-    });
-}
-
-if (rodnixBtn) {
-    rodnixBtn.addEventListener("click", () => {
-        playRadio(1);
-    });
-}
-
-if (novoeBtn) {
-    novoeBtn.addEventListener("click", () => {
-        playRadio(2);
-    });
-}
-
-if (avtoradioBtn) {
-    avtoradioBtn.addEventListener("click", () => {
-        playRadio(3);
-    });
-}
-
-// === КНОПКА ВЫДВИЖЕНИЯ ПЛЕЙЛИСТА ===
-const playlistToggle = document.querySelector(".btm_playlist");
-
-if (playlistToggle) {
-    playlistToggle.addEventListener("click", () => {
-        document.querySelector(".playlist").classList.toggle("open");
-    });
-}
+// === ОТКРЫТИЕ ПЛЕЙЛИСТА ===
+playlistBtn.addEventListener("click", () => {
+    playlistBox.classList.toggle("open");
+});
 
 // === АВТОПЕРЕХОД ДЛЯ ОБЫЧНЫХ MP3 ===
 audioEl.addEventListener("ended", () => {
@@ -330,7 +223,7 @@ function attachCatboxEndHandler() {
     }
 }
 
-// === ФУНКЦИЯ ПЕРЕХОДА НА СЛЕДУЮЩИЙ ТРЕК ===
+// === СЛЕДУЮЩИЙ ТРЕК ===
 function playNextTrack() {
     currentTrack++;
 
