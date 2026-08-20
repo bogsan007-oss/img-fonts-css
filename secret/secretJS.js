@@ -3,7 +3,7 @@ console.log("НОВЫЙ МОТОР ДЛЯ СЕКРЕТНОГО ПЛЕЕРА ЗА
 // === ЭЛЕМЕНТЫ ===
 const playBtn     = document.getElementById("player-circle");
 const playIcon    = document.getElementById("play-icon");
-const pauseIcon   = document.getElementById("pause-icon");
+const pauseIcon   = document.getElementById("pause-icon"); // ДОБАВЛЕНО
 const audioEl     = document.getElementById("player");
 
 const bars        = document.querySelectorAll("#visualizer .bar");
@@ -11,7 +11,6 @@ const leftBar     = document.querySelector("#dual-visualizer .left-bar");
 const rightBar    = document.querySelector("#dual-visualizer .right-bar");
 
 const playlistBox = document.querySelector(".playlist-box");
-const playlistBtn = document.querySelector(".btn-playlist"); // теперь НЕ активная
 const trackEls    = document.querySelectorAll(".track");
 
 const trackNameEl = document.getElementById("current-track-name");
@@ -66,7 +65,7 @@ async function initEqForCatbox(url) {
 }
 
 function playCatboxBuffer() {
-    if (!catboxBuffer) return; // защита от пустого буфера
+    if (!catboxBuffer) return; // защита
 
     if (sourceNode) sourceNode.disconnect();
 
@@ -112,7 +111,6 @@ function animateEq() {
         bar.style.transform = `scaleY(${(dataArray[i] / 255) * 1.2})`;
     });
 
-    // двойной визуализатор
     if (leftBar && rightBar) {
         const L = dataArray[5] / 255;
         const R = dataArray[15] / 255;
@@ -214,11 +212,6 @@ trackEls.forEach(track => {
         playMp3(index);
     });
 });
-
-// === ПЛЕЙЛИСТ НЕ ВЫЕЗЖАЕТ ===
-// playlistBtn.addEventListener("click", () => {
-//     playlistBox.classList.toggle("open");
-// });
 
 // === АВТОПЕРЕХОД ДЛЯ ОБЫЧНЫХ MP3 ===
 audioEl.addEventListener("ended", () => {
