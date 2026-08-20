@@ -10,7 +10,7 @@ const leftBar     = document.querySelector("#dual-visualizer .left-bar");
 const rightBar    = document.querySelector("#dual-visualizer .right-bar");
 
 const playlistBox = document.querySelector(".playlist-box");
-const playlistBtn = document.querySelector(".btn-playlist");
+const playlistBtn = document.querySelector(".btn-playlist"); // теперь НЕ активная
 const trackEls    = document.querySelectorAll(".track");
 
 const trackNameEl = document.getElementById("current-track-name");
@@ -136,7 +136,7 @@ async function playMp3(index) {
         initEqForLocalMp3();
 
         isPlaying = true;
-        playIcon.style.opacity = 0; // скрыть play-иконку
+        playIcon.style.opacity = 0;
         return;
     }
 
@@ -200,10 +200,10 @@ trackEls.forEach(track => {
     });
 });
 
-// === ОТКРЫТИЕ ПЛЕЙЛИСТА ===
-playlistBtn.addEventListener("click", () => {
-    playlistBox.classList.toggle("open");
-});
+// === ОТКЛЮЧЕНО: ПЛЕЙЛИСТ НЕ ВЫЕЗЖАЕТ И НЕ СКРЫВАЕТСЯ ===
+// playlistBtn.addEventListener("click", () => {
+//     playlistBox.classList.toggle("open");
+// });
 
 // === АВТОПЕРЕХОД ДЛЯ ОБЫЧНЫХ MP3 ===
 audioEl.addEventListener("ended", () => {
