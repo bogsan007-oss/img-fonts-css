@@ -334,3 +334,37 @@ audioEl.addEventListener("stalled", () => {
     isPlaying = false;
     stopSmoothVisualizer();
 });
+async function loadRecipe() {
+  const url = "https://api.rss2json.com/v1/api.json?rss_url=http://rezept.brodiaga.com/feeds/posts/default?alt=rss";
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    const item = data.items[0]; // последняя запись
+    const title = item.title;
+    const link = item.link;
+    const thumbnail = item.thumbnail; // картинка
+
+    const cell = document.querySelector(".cell-news");
+    if (cell) {
+      cell.innerHTML = `
+        <div style="font-weight:bold; font-size:18px; margin-bottom:8px;">
+          ${title}
+        </div>
+
+        <a href="${link}" target="_blank">
+          <img src="${thumbnail}" style="width:100%; border-radius:6px;">
+        </a>
+      `;
+    }
+  } catch (e) {
+    console.log("Ошибка RSS:", e);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", loadRecipe);
+
+
+
+
