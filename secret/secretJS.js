@@ -364,7 +364,3 @@ async function loadRecipe() {
 }
 
 document.addEventListener("DOMContentLoaded", loadRecipe);
-
-
-
-
