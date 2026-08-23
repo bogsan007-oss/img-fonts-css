@@ -346,10 +346,13 @@ async function loadRecipe() {
     const response = await fetch(url);
     const data = await response.json();
 
-    const item = data.items[0]; // последняя запись
-    const title = item.title;
-    const link = item.link;
-    const thumbnail = item.thumbnail; // картинка
+    // ВАЖНО: выбираем случайный рецепт
+    const items = data.items;
+    const randomItem = items[Math.floor(Math.random() * items.length)];
+
+    const title = randomItem.title;
+    const link = randomItem.link;
+    const thumbnail = randomItem.thumbnail;
 
     const cell = document.querySelector(".cell-news");
     if (cell) {
