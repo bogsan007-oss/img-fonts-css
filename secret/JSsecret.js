@@ -39,7 +39,12 @@ const radioStations = [
     { name: "Новое радио",          src: "https://stream.newradio.ru/novoe96.aacp?9167" },
     { name: "Авторадио",            src: "https://pub0201.101.ru/stream/air/aac/64/100?7b4b6666" },
     { name: "Радио Родных Дорог",   src: "https://stream1.radiord.ru:8000/live128.mp3?e5f1" },
-    { name: "Шансон",               src: "https://chanson.hostingradio.ru:8041/chanson256.mp3" }
+    { name: "Шансон",               src: "https://chanson.hostingradio.ru:8041/chanson256.mp3" },
+    { name: "Русское радио",        src: "https://rusradio.hostingradio.ru/rusradio96.aacp?67c24" },
+    { name: "Монт екало",           src: "https://montecarlo.hostingradio.ru/montecarlo96.aacp?acac" },
+    { name: "Европа плюс",          src: "https://pub0201.101.ru/stream/air/aac/64/100?7b4b6666" },
+    { name: "Эльдорадо радио",      src: "https://emgspb.hostingradio.ru/eldoradio128.mp3?e139a94b" },
+    { name: "Шоколад радио",        src: "https://choco.hostingradio.ru:10010/fm?0665d328" }
 ];
 
 // === СТАВИМ ПЕРВЫЙ ТРЕК ===
