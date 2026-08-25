@@ -372,3 +372,20 @@ async function loadRecipe() {
 }
 
 document.addEventListener("DOMContentLoaded", loadRecipe);
+const card = document.querySelector('.cell-3');
+const modal = document.getElementById('thoughtModal');
+const text = document.getElementById('thoughtText');
+const closeBtn = document.querySelector('.thought-close');
+
+card.addEventListener('click', () => {
+  text.textContent = card.dataset.full;
+  modal.style.display = 'flex';
+});
+
+closeBtn.addEventListener('click', () => {
+  modal.style.display = 'none';
+});
+
+modal.addEventListener('click', (e) => {
+  if (e.target === modal) modal.style.display = 'none';
+});
