@@ -41,7 +41,7 @@ const radioStations = [
     { name: "Радио Родных Дорог",   src: "https://stream1.radiord.ru:8000/live128.mp3?e5f1" },
     { name: "Шансон",               src: "https://chanson.hostingradio.ru:8041/chanson256.mp3" },
     { name: "Русское радио",        src: "https://rusradio.hostingradio.ru/rusradio96.aacp?67c24" },
-    { name: "Монт екало",           src: "https://montecarlo.hostingradio.ru/montecarlo96.aacp?acac" },
+    { name: "Монте карло",           src: "https://montecarlo.hostingradio.ru/montecarlo96.aacp?acac" },
     { name: "Европа плюс",          src: "https://pub0201.101.ru/stream/air/aac/64/100?7b4b6666" },
     { name: "Эльдорадо радио",      src: "https://emgspb.hostingradio.ru/eldoradio128.mp3?e139a94b" },
     { name: "Шоколад радио",        src: "https://choco.hostingradio.ru:10010/fm?0665d328" }
@@ -339,6 +339,7 @@ audioEl.addEventListener("stalled", () => {
     isPlaying = false;
     stopSmoothVisualizer();
 });
+// ===== Ячека первая рецепты  ======
 async function loadRecipe() {
   const url = "https://api.rss2json.com/v1/api.json?rss_url=http://rezept.brodiaga.com/feeds/posts/default?alt=rss";
 
@@ -354,17 +355,17 @@ async function loadRecipe() {
     const link = randomItem.link;
     const thumbnail = randomItem.thumbnail;
 
-    const cell = document.querySelector(".cell-news");
+    const cell = document.querySelector(".paper-news");
     if (cell) {
       cell.innerHTML = `
-        <div style="font-weight:bold; font-size:18px; margin-bottom:8px;">
-          ${title}
-        </div>
+          <div class="paper-title">
+              ${title}
+           </div>
+            <a href="${link}" target="_blank">
+           <img class="paper-img" src="${thumbnail}">
+            </a>
+         `;
 
-        <a href="${link}" target="_blank">
-          <img src="${thumbnail}" style="width:100%; border-radius:6px;">
-        </a>
-      `;
     }
   } catch (e) {
     console.log("Ошибка RSS:", e);
@@ -373,19 +374,16 @@ async function loadRecipe() {
 
 document.addEventListener("DOMContentLoaded", loadRecipe);
 const card = document.querySelector('.cell-3');
-const modal = document.getElementById('thoughtModal');
-const text = document.getElementById('thoughtText');
-const closeBtn = document.querySelector('.thought-close');
-
 card.addEventListener('click', () => {
-  text.textContent = card.dataset.full;
-  modal.style.display = 'flex';
+  const fullText = card.dataset.full;
+  document.getElementById('thoughtText').textContent = fullText;
+  document.getElementById('thoughtModal').style.display = 'flex';
 });
-
+const closeBtn = document.querySelector('.thought-close');
 closeBtn.addEventListener('click', () => {
-  modal.style.display = 'none';
+  document.getElementById('thoughtModal').style.display = 'none';
 });
-
+const modal = document.getElementById('thoughtModal');
 modal.addEventListener('click', (e) => {
   if (e.target === modal) modal.style.display = 'none';
 });
