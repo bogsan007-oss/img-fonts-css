@@ -354,7 +354,7 @@ async function loadRecipe() {
     const link = randomItem.link;
     const thumbnail = randomItem.thumbnail;
 
-    const cell = document.querySelector(".cell-news");
+    const cell = document.querySelector(".paper-news");
     if (cell) {
       cell.innerHTML = `
         <div style="font-weight:bold; font-size:18px; margin-bottom:8px;">
