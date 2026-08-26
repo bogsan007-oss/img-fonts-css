@@ -377,46 +377,46 @@ audioEl.addEventListener("stalled", () => {
 })();
          // ячейка третья мысли умные или нет
 (function() {
-  document.addEventListener('DOMContentLoaded', () => {
-    const previewEl = document.getElementById('thoughtText'); // Текст на пергаменте
-    const card = document.getElementById('thoughtCard');     // Сама карточка
+  document.addEventListener('DOMContentLoaded', async () => {
+    const card = document.getElementById('thoughtCard');
+    const previewEl = card ? card.querySelector('.thought-preview') : null;
     const thoughtModalEl = document.getElementById('thoughtModal');
-    const thoughtTextEl = document.getElementById('thoughtText'); // Текст внутри модалки
+    const thoughtTextEl = document.getElementById('thoughtText');
     const closeBtn = thoughtModalEl ? thoughtModalEl.querySelector('.thought-close') : null;
 
-    // Проверяем, загрузились ли мысли из нашего thoughts.js
-    if (typeof window.siteThoughts !== 'undefined' && window.siteThoughts.length > 0) {
-      // Выбираем случайную мысль
-      const randomThought = window.siteThoughts[Math.floor(Math.random() * window.siteThoughts.length)];
+    let thoughts = [];
+
+    try {
+      // Надежно скачиваем файл с мыслями как текст, минуя блокировки браузера
+      const response = await fetch('https://raw.githubusercontent.com/bogsan007-oss/img-fonts-css/main/secret/thoughts.js');
+      const text = await response.text();
       
-      // Записываем превью на карточку-пергамент
-      if (previewEl) {
-        previewEl.textContent = randomThought.preview;
-      }
+      // Вырезаем название переменной и превращаем текст в рабочий массив
+      const cleanCode = text.replace(/window\.siteThoughts\s*=\s*/, 'window._tempThoughts = ');
+      const scriptTag = document.createElement('script');
+      scriptTag.textContent = cleanCode;
+      document.head.appendChild(scriptTag);
       
-      // Сохраняем полный текст в dataset для модального окна
-      if (card) {
-        card.dataset.full = randomThought.full;
-      }
-      
-      console.log("Мысли успешно загружены из JS!");
-    } else {
-      if (previewEl) {
-        previewEl.textContent = "Мысли не найдены...";
-      }
-      console.log("⚠️ Массив мыслей не найден!");
+      thoughts = window._tempThoughts;
+      delete window._tempThoughts;
+    } catch (e) {
+      console.error("Не удалось загрузить файл с мыслями:", e);
     }
 
-    console.log("Элементы найдены:", { card, thoughtModalEl, thoughtTextEl });
+    // Выводим случайную мысль
+    if (thoughts && thoughts.length > 0) {
+      const randomThought = thoughts[Math.floor(Math.random() * thoughts.length)];
+      if (previewEl) previewEl.textContent = randomThought.preview;
+      if (card) card.dataset.full = randomThought.full;
+    } else {
+      if (previewEl) previewEl.textContent = "Мысли не найдены...";
+    }
 
     // Открытие модалки по клику
     if (card && thoughtModalEl && thoughtTextEl) {
       card.addEventListener('click', (e) => {
         e.preventDefault();
-        console.log("Клик по карточке сработал!");
-        
-        const fullText = card.dataset.full || "Мысль дня...";
-        thoughtTextEl.textContent = fullText;
+        thoughtTextEl.textContent = card.dataset.full || "Мысль дня...";
         thoughtModalEl.classList.add('active');
       });
     }
