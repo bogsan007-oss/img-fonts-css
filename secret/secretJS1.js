@@ -357,14 +357,14 @@ async function loadRecipe() {
     const cell = document.querySelector(".paper-news");
     if (cell) {
       cell.innerHTML = `
-        <div style="font-weight:bold; font-size:18px; margin-bottom:8px;">
-          ${title}
-        </div>
+          <div class="paper-title">
+              ${title}
+           </div>
+            <a href="${link}" target="_blank">
+           <img class="paper-img" src="${thumbnail}">
+            </a>
+         `;
 
-        <a href="${link}" target="_blank">
-          <img src="${thumbnail}" style="width:100%; border-radius:6px;">
-        </a>
-      `;
     }
   } catch (e) {
     console.log("Ошибка RSS:", e);
