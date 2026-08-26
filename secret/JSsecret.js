@@ -358,13 +358,14 @@ async function loadRecipe() {
     const cell = document.querySelector(".paper-news");
     if (cell) {
       cell.innerHTML = `
-          <div class="paper-title">
-              ${title}
-           </div>
-            <a href="${link}" target="_blank">
-           <img class="paper-img" src="${thumbnail}">
-            </a>
-         `;
+        <div class="paper-title">
+          ${title}
+        </div>
+
+        <a href="${link}" target="_blank">
+          <img class="paper-img" src="${thumbnail}">
+        </a>
+      `;
 
     }
   } catch (e) {
