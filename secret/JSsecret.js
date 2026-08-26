@@ -377,62 +377,62 @@ audioEl.addEventListener("stalled", () => {
 })();
          // ячейка третья мысли умные или нет
 (function() {
-  document.addEventListener("DOMContentLoaded", () => {
-    const card = document.getElementById('thoughtCard') || document.querySelector('.cell-3');
-    const previewEl = card ? card.querySelector('.thought-preview') : null;
-    const thoughtTextEl = document.getElementById('thoughtText');
+  document.addEventListener('DOMContentLoaded', () => {
+    const previewEl = document.getElementById('thoughtText'); // Текст на пергаменте
+    const card = document.getElementById('thoughtCard');     // Сама карточка
     const thoughtModalEl = document.getElementById('thoughtModal');
+    const thoughtTextEl = document.getElementById('thoughtText'); // Текст внутри модалки
     const closeBtn = thoughtModalEl ? thoughtModalEl.querySelector('.thought-close') : null;
 
-    console.log("Элементы найдены:", { card, thoughtModalEl, thoughtTextEl }); // Проверяем в F12 -> Console
-
-    // 1. Загружаем мысли из JSON
-    async function loadThought() {
-      try {
-        const response = await fetch('thoughts.json');
-        const thoughts = await response.json();
-
-        if (thoughts && thoughts.length > 0) {
-          const randomThought = thoughts[Math.floor(Math.random() * thoughts.length)];
-
-          if (card && previewEl) {
-            previewEl.textContent = randomThought.preview;
-            card.dataset.full = randomThought.full;
-          }
-        }
-      } catch (e) {
-        console.log("Ошибка загрузки thoughts.json:", e);
+    // Проверяем, загрузились ли мысли из нашего thoughts.js
+    if (typeof window.siteThoughts !== 'undefined' && window.siteThoughts.length > 0) {
+      // Выбираем случайную мысль
+      const randomThought = window.siteThoughts[Math.floor(Math.random() * window.siteThoughts.length)];
+      
+      // Записываем превью на карточку-пергамент
+      if (previewEl) {
+        previewEl.textContent = randomThought.preview;
       }
+      
+      // Сохраняем полный текст в dataset для модального окна
+      if (card) {
+        card.dataset.full = randomThought.full;
+      }
+      
+      console.log("Мысли успешно загружены из JS!");
+    } else {
+      if (previewEl) {
+        previewEl.textContent = "Мысли не найдены...";
+      }
+      console.log("⚠️ Массив мыслей не найден!");
     }
 
-    loadThought();
+    console.log("Элементы найдены:", { card, thoughtModalEl, thoughtTextEl });
 
-    // 2. Открытие модалки по клику
+    // Открытие модалки по клику
     if (card && thoughtModalEl && thoughtTextEl) {
       card.addEventListener('click', (e) => {
         e.preventDefault();
-        console.log("Клик по карточке сработал!"); // Проверяем, доходит ли клик
+        console.log("Клик по карточке сработал!");
         
-        const fullText = card.dataset.full || (previewEl ? previewEl.textContent : "Мысль дня...");
+        const fullText = card.dataset.full || "Мысль дня...";
         thoughtTextEl.textContent = fullText;
-        thoughtModalEl.style.display = 'flex';
+        thoughtModalEl.classList.add('active');
       });
-    } else {
-      console.log("⚠️ Что-то из элементов (карточка или модалка) НЕ найдено!");
     }
 
-    // 3. Закрытие по крестику
+    // Закрытие по крестику
     if (closeBtn && thoughtModalEl) {
       closeBtn.addEventListener('click', () => {
-        thoughtModalEl.style.display = 'none';
+        thoughtModalEl.classList.remove('active');
       });
     }
 
-    // 4. Закрытие по клику на фон
+    // Закрытие по клику на фон
     if (thoughtModalEl) {
       thoughtModalEl.addEventListener('click', (e) => {
         if (e.target === thoughtModalEl) {
-          thoughtModalEl.style.display = 'none';
+          thoughtModalEl.classList.remove('active');
         }
       });
     }
