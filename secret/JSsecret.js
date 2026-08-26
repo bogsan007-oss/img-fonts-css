@@ -427,7 +427,6 @@ audioEl.addEventListener("stalled", () => {
         thoughtModalEl.style.display = 'none';
       });
     }
-
     // 4. Закрытие по клику на фон
     if (thoughtModalEl) {
       thoughtModalEl.addEventListener('click', (e) => {
