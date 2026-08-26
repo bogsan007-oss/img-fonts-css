@@ -340,51 +340,101 @@ audioEl.addEventListener("stalled", () => {
     stopSmoothVisualizer();
 });
 // ===== Ячека первая рецепты  ======
-async function loadRecipe() {
-  const url = "https://api.rss2json.com/v1/api.json?rss_url=http://rezept.brodiaga.com/feeds/posts/default?alt=rss";
+(function() {
+  async function loadRecipe() {
+    const url = "https://api.rss2json.com/v1/api.json?rss_url=http://rezept.brodiaga.com/feeds/posts/default?alt=rss";
 
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
 
-    // ВАЖНО: выбираем случайный рецепт
-    const items = data.items;
-    const randomItem = items[Math.floor(Math.random() * items.length)];
+      // ВАЖНО: выбираем случайный рецепт
+      const items = data.items;
+      const randomItem = items[Math.floor(Math.random() * items.length)];
 
-    const title = randomItem.title;
-    const link = randomItem.link;
-    const thumbnail = randomItem.thumbnail;
+      const title = randomItem.title;
+      const link = randomItem.link;
+      const thumbnail = randomItem.thumbnail;
 
-    const cell = document.querySelector(".paper-news");
-    if (cell) {
-      cell.innerHTML = `
-        <div class="paper-title">
-          ${title}
-        </div>
+      const cell = document.querySelector(".paper-news");
+      if (cell) {
+        cell.innerHTML = `
+          <div class="paper-title">
+            ${title}
+          </div>
 
-        <a href="${link}" target="_blank">
-          <img class="paper-img" src="${thumbnail}">
-        </a>
-      `;
-
+          <a href="${link}" target="_blank">
+            <img class="paper-img" src="${thumbnail}">
+          </a>
+        `;
+      }
+    } catch (e) {
+      console.log("Ошибка RSS:", e);
     }
-  } catch (e) {
-    console.log("Ошибка RSS:", e);
   }
-}
 
-document.addEventListener("DOMContentLoaded", loadRecipe);
-const card = document.querySelector('.cell-3');
-card.addEventListener('click', () => {
-  const fullText = card.dataset.full;
-  document.getElementById('thoughtText').textContent = fullText;
-  document.getElementById('thoughtModal').style.display = 'flex';
-});
-const closeBtn = document.querySelector('.thought-close');
-closeBtn.addEventListener('click', () => {
-  document.getElementById('thoughtModal').style.display = 'none';
-});
-const modal = document.getElementById('thoughtModal');
-modal.addEventListener('click', (e) => {
-  if (e.target === modal) modal.style.display = 'none';
-});
+  document.addEventListener("DOMContentLoaded", loadRecipe);
+})();
+         // ячейка третья мысли умные или нет
+(function() {
+  document.addEventListener("DOMContentLoaded", () => {
+    const card = document.getElementById('thoughtCard') || document.querySelector('.cell-3');
+    const previewEl = card ? card.querySelector('.thought-preview') : null;
+    const thoughtTextEl = document.getElementById('thoughtText');
+    const thoughtModalEl = document.getElementById('thoughtModal');
+    const closeBtn = thoughtModalEl ? thoughtModalEl.querySelector('.thought-close') : null;
+
+    console.log("Элементы найдены:", { card, thoughtModalEl, thoughtTextEl }); // Проверяем в F12 -> Console
+
+    // 1. Загружаем мысли из JSON
+    async function loadThought() {
+      try {
+        const response = await fetch('thoughts.json');
+        const thoughts = await response.json();
+
+        if (thoughts && thoughts.length > 0) {
+          const randomThought = thoughts[Math.floor(Math.random() * thoughts.length)];
+
+          if (card && previewEl) {
+            previewEl.textContent = randomThought.preview;
+            card.dataset.full = randomThought.full;
+          }
+        }
+      } catch (e) {
+        console.log("Ошибка загрузки thoughts.json:", e);
+      }
+    }
+
+    loadThought();
+
+    // 2. Открытие модалки по клику
+    if (card && thoughtModalEl && thoughtTextEl) {
+      card.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log("Клик по карточке сработал!"); // Проверяем, доходит ли клик
+        
+        const fullText = card.dataset.full || (previewEl ? previewEl.textContent : "Мысль дня...");
+        thoughtTextEl.textContent = fullText;
+        thoughtModalEl.style.display = 'flex';
+      });
+    } else {
+      console.log("⚠️ Что-то из элементов (карточка или модалка) НЕ найдено!");
+    }
+
+    // 3. Закрытие по крестику
+    if (closeBtn && thoughtModalEl) {
+      closeBtn.addEventListener('click', () => {
+        thoughtModalEl.style.display = 'none';
+      });
+    }
+
+    // 4. Закрытие по клику на фон
+    if (thoughtModalEl) {
+      thoughtModalEl.addEventListener('click', (e) => {
+        if (e.target === thoughtModalEl) {
+          thoughtModalEl.style.display = 'none';
+        }
+      });
+    }
+  });
+})();
