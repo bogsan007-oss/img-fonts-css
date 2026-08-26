@@ -339,6 +339,7 @@ audioEl.addEventListener("stalled", () => {
     isPlaying = false;
     stopSmoothVisualizer();
 });
+// ===== Ячека первая рецепты  ======
 async function loadRecipe() {
   const url = "https://api.rss2json.com/v1/api.json?rss_url=http://rezept.brodiaga.com/feeds/posts/default?alt=rss";
 
