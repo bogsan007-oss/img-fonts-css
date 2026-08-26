@@ -340,50 +340,101 @@ audioEl.addEventListener("stalled", () => {
     stopSmoothVisualizer();
 });
 // ===== Ячека первая рецепты  ======
-async function loadRecipe() {
-  const url = "https://api.rss2json.com/v1/api.json?rss_url=http://rezept.brodiaga.com/feeds/posts/default?alt=rss";
+(function() {
+  async function loadRecipe() {
+    const url = "https://api.rss2json.com/v1/api.json?rss_url=http://rezept.brodiaga.com/feeds/posts/default?alt=rss";
 
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
 
-    // ВАЖНО: выбираем случайный рецепт
-    const items = data.items;
-    const randomItem = items[Math.floor(Math.random() * items.length)];
+      // ВАЖНО: выбираем случайный рецепт
+      const items = data.items;
+      const randomItem = items[Math.floor(Math.random() * items.length)];
 
-    const title = randomItem.title;
-    const link = randomItem.link;
-    const thumbnail = randomItem.thumbnail;
+      const title = randomItem.title;
+      const link = randomItem.link;
+      const thumbnail = randomItem.thumbnail;
 
-    const cell = document.querySelector(".paper-news");
-    if (cell) {
-      cell.innerHTML = `
+      const cell = document.querySelector(".paper-news");
+      if (cell) {
+        cell.innerHTML = `
           <div class="paper-title">
-              ${title}
-           </div>
-            <a href="${link}" target="_blank">
-           <img class="paper-img" src="${thumbnail}">
-            </a>
-         `;
+            ${title}
+          </div>
 
+          <a href="${link}" target="_blank">
+            <img class="paper-img" src="${thumbnail}">
+          </a>
+        `;
+      }
+    } catch (e) {
+      console.log("Ошибка RSS:", e);
     }
-  } catch (e) {
-    console.log("Ошибка RSS:", e);
   }
-}
 
-document.addEventListener("DOMContentLoaded", loadRecipe);
-const card = document.querySelector('.cell-3');
-card.addEventListener('click', () => {
-  const fullText = card.dataset.full;
-  document.getElementById('thoughtText').textContent = fullText;
-  document.getElementById('thoughtModal').style.display = 'flex';
-});
-const closeBtn = document.querySelector('.thought-close');
-closeBtn.addEventListener('click', () => {
-  document.getElementById('thoughtModal').style.display = 'none';
-});
-const modal = document.getElementById('thoughtModal');
-modal.addEventListener('click', (e) => {
-  if (e.target === modal) modal.style.display = 'none';
-});
+  document.addEventListener("DOMContentLoaded", loadRecipe);
+})();
+         // ячейка третья мысли умные или нет
+(function() {
+  document.addEventListener('DOMContentLoaded', async () => {
+    const card = document.getElementById('thoughtCard');
+    const previewEl = card ? card.querySelector('.thought-preview') : null;
+    const thoughtModalEl = document.getElementById('thoughtModal');
+    const thoughtTextEl = document.getElementById('thoughtText');
+    const closeBtn = thoughtModalEl ? thoughtModalEl.querySelector('.thought-close') : null;
+
+    let thoughts = [];
+
+    try {
+      // Надежно скачиваем файл с мыслями как текст, минуя блокировки браузера
+      const response = await fetch('https://raw.githubusercontent.com/bogsan007-oss/img-fonts-css/main/secret/thoughts.js');
+      const text = await response.text();
+      
+      // Вырезаем название переменной и превращаем текст в рабочий массив
+      const cleanCode = text.replace(/window\.siteThoughts\s*=\s*/, 'window._tempThoughts = ');
+      const scriptTag = document.createElement('script');
+      scriptTag.textContent = cleanCode;
+      document.head.appendChild(scriptTag);
+      
+      thoughts = window._tempThoughts;
+      delete window._tempThoughts;
+    } catch (e) {
+      console.error("Не удалось загрузить файл с мыслями:", e);
+    }
+
+    // Выводим случайную мысль
+    if (thoughts && thoughts.length > 0) {
+      const randomThought = thoughts[Math.floor(Math.random() * thoughts.length)];
+      if (previewEl) previewEl.textContent = randomThought.preview;
+      if (card) card.dataset.full = randomThought.full;
+    } else {
+      if (previewEl) previewEl.textContent = "Мысли не найдены...";
+    }
+
+    // Открытие модалки по клику
+    if (card && thoughtModalEl && thoughtTextEl) {
+      card.addEventListener('click', (e) => {
+        e.preventDefault();
+        thoughtTextEl.textContent = card.dataset.full || "Мысль дня...";
+        thoughtModalEl.classList.add('active');
+      });
+    }
+
+    // Закрытие по крестику
+    if (closeBtn && thoughtModalEl) {
+      closeBtn.addEventListener('click', () => {
+        thoughtModalEl.classList.remove('active');
+      });
+    }
+
+    // Закрытие по клику на фон
+    if (thoughtModalEl) {
+      thoughtModalEl.addEventListener('click', (e) => {
+        if (e.target === thoughtModalEl) {
+          thoughtModalEl.classList.remove('active');
+        }
+      });
+    }
+  });
+})();
