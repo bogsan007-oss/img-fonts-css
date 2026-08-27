@@ -46,7 +46,11 @@ const radioStations = [
     { name: "Эльдорадо радио",      src: "https://emgspb.hostingradio.ru/eldoradio128.mp3?e139a94b" },
     { name: "Шоколад радио",        src: "https://choco.hostingradio.ru:10010/fm?0665d328" },
     { name: "Радио Максимум",       src: "http://maximum.hostingradio.ru/maximum96.aacp" },
-    { name: "Radio Paradise",       src: "https://stream.radioparadise.com/mp3-128" }	
+    { name: "Radio Paradise",       src: "https://stream.radioparadise.com/mp3-128" },
+    { name: "Наше радио",           src: "https://nashe1.hostingradio.ru:80/nashe-128.mp3" },
+    { name: "Радио Маяк",           src: "https://nashe1.hostingradio.ru:80/nashe-128.mp3" },
+    { name: "радио Родники",        src: "https://rodniki.hostingradio.ru/rodniki128.mp3" },
+    { name: "RetroFM",              src: "https://retro.hostingradio.ru:8043/retro256.mp3" }
 ];
 
 // === СТАВИМ ПЕРВЫЙ ТРЕК ===
