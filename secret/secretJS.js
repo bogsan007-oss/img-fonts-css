@@ -50,7 +50,11 @@ const radioStations = [
     { name: "Наше радио",           src: "https://nashe1.hostingradio.ru:80/nashe-128.mp3" },
     { name: "Радио Маяк",           src: "https://nashe1.hostingradio.ru:80/nashe-128.mp3" },
     { name: "радио Родники",        src: "https://rodniki.hostingradio.ru/rodniki128.mp3" },
-    { name: "RetroFM",              src: "https://retro.hostingradio.ru:8043/retro256.mp3" }
+    { name: "RetroFM",              src: "https://retro.hostingradio.ru:8043/retro256.mp3" },
+    { name: "Казак FM",             src: "https://radio.kazak.fm/kazak_fm.mp3?radiostatistica=online-red.fm" },
+    { name: "Радио «Дача»",         src: "https://listen15.vdfm.ru:8000/dacha?type=.mp3" },
+    { name: "Маруся FM",            src: "https://listen.vdfm.ru:8000/marusya" },
+    { name: "Хорошее Радио",        src: "https://hr.amgradio.ru/horoshee.aacp" }
 ];
 
 // === СТАВИМ ПЕРВЫЙ ТРЕК ===
