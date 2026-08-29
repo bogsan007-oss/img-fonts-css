@@ -464,12 +464,12 @@ block.addEventListener('click', () => openProductModal(item));
 
 function openProductModal(item) {
   document.getElementById("thoughtText").innerHTML = `
-  <div style="display:flex; align-items:flex-start; gap:15px;">
+  <div style="display:flex; align-items:flex-start; gap:5px;">
 
     <img src="${item.img}"
-         style="width:150px; height:150px; border-radius:6px; flex-shrink:0;">
+         style="width:100px; height:100px; flex-shrink:0;">
 
-    <div style="font-size:22px; line-height:1.3; text-align:left;">
+    <div style="font-size:22px; line-height:1.0; text-align:left;">
       <b>${item.title}</b><br><br>
       Цена: <b>${item.price}</b><br>
       <span style="text-decoration:line-through; color:#fff;">${item.oldPrice}</span><br>
