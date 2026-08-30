@@ -41,10 +41,20 @@ const radioStations = [
     { name: "Радио Родных Дорог",   src: "https://stream1.radiord.ru:8000/live128.mp3?e5f1" },
     { name: "Шансон",               src: "https://chanson.hostingradio.ru:8041/chanson256.mp3" },
     { name: "Русское радио",        src: "https://rusradio.hostingradio.ru/rusradio96.aacp?67c24" },
-    { name: "Монте карло",           src: "https://montecarlo.hostingradio.ru/montecarlo96.aacp?acac" },
+    { name: "Монте карло",          src: "https://montecarlo.hostingradio.ru/montecarlo96.aacp?acac" },
     { name: "Европа плюс",          src: "https://pub0201.101.ru/stream/air/aac/64/100?7b4b6666" },
     { name: "Эльдорадо радио",      src: "https://emgspb.hostingradio.ru/eldoradio128.mp3?e139a94b" },
-    { name: "Шоколад радио",        src: "https://choco.hostingradio.ru:10010/fm?0665d328" }
+    { name: "Шоколад радио",        src: "https://choco.hostingradio.ru:10010/fm?0665d328" },
+    { name: "Радио Максимум",       src: "http://maximum.hostingradio.ru/maximum96.aacp" },
+    { name: "Radio Paradise",       src: "https://stream.radioparadise.com/mp3-128" },
+    { name: "Наше радио",           src: "https://nashe1.hostingradio.ru:80/nashe-128.mp3" },
+    { name: "Радио Маяк",           src: "https://nashe1.hostingradio.ru:80/nashe-128.mp3" },
+    { name: "радио Родники",        src: "https://rodniki.hostingradio.ru/rodniki128.mp3" },
+    { name: "RetroFM",              src: "https://retro.hostingradio.ru:8043/retro256.mp3" },
+    { name: "Казак FM",             src: "https://radio.kazak.fm/kazak_fm.mp3?radiostatistica=online-red.fm" },
+    { name: "Радио «Дача»",         src: "https://listen15.vdfm.ru:8000/dacha?type=.mp3" },
+    { name: "Маруся FM",            src: "https://listen.vdfm.ru:8000/marusya" },
+    { name: "Хорошее Радио",        src: "https://hr.amgradio.ru/horoshee.aacp" }
 ];
 
 // === СТАВИМ ПЕРВЫЙ ТРЕК ===
@@ -438,3 +448,206 @@ audioEl.addEventListener("stalled", () => {
     }
   });
 })();
+/* ===== 1. Вывод карточек из массива ===== */
+
+const container = document.querySelector('.prodam-card'); 
+// Вставляем карточки внутрь твоего блока .prodam-card
+
+prodat.forEach((item, index) => {
+  const card = document.createElement('div');
+  card.className = 'prodam-card-item';
+  card.innerHTML = `
+    <img src="${item.img}" alt="${item.title}">
+    <div class="prodam-card-title">${item.title}</div>
+  `;
+
+  // При клике открываем модальное окно
+  card.addEventListener('click', () => openProductModal(item));
+
+  container.appendChild(card);
+});
+
+/* ====== ВЫВОД ТОВАРОВ В СУЩЕСТВУЮЩИЕ Ячейка 2 ====== */
+/* ====== ВЫБИРАЕМ СЛУЧАЙНЫЙ ТОВАР ПРИ КАЖДОЙ ЗАГРУЗКЕ ====== */
+
+function getRandomProduct() {
+  return prodat[Math.floor(Math.random() * prodat.length)];
+}
+
+/* ====== ВСТАВЛЯЕМ ТОВАР В ЕДИНСТВЕННЫЙ БЛОК ====== */
+
+const block = document.querySelector('.prodam-card');
+const item = getRandomProduct();   // ← вот тут выбирается новый товар при каждой загрузке
+
+block.innerHTML = `
+  <img src="${item.img}" alt="${item.title}">
+  <div class="prodam-card-title">${item.title}</div>
+`;
+
+/* ====== ДЕЛАЕМ КАРТОЧКУ КЛИКАБЕЛЬНОЙ ====== */
+
+block.addEventListener('click', () => openProductModal(item));
+
+/* ====== ОТКРЫТИЕ ТВОЕГО СУЩЕСТВУЮЩЕГО МОДАЛЬНОГО ОКНА ====== */
+
+function openProductModal(item) {
+  document.getElementById("thoughtText").innerHTML = `
+  <div style="display:flex; align-items:flex-start; gap:15px;">
+
+    <img src="${item.img}"
+         style="width:150px; height:150px; border-radius:6px; flex-shrink:0;">
+
+    <div style="font-size:22px; line-height:1.3; text-align:left;">
+      <b>${item.title}</b><br><br>
+      Цена: <b>${item.price}</b><br>
+      <span style="text-decoration:line-through; color:#fff;">${item.oldPrice}</span><br>
+      <span style="color:#b30000; font-weight:bold;">Скидка: ${item.discount}</span><br><br>
+
+      <a href="${item.link}" target="_blank"
+         style="padding:6px 12px; background:#b30000; color:#fff;
+                border-radius:4px; text-decoration:none;">
+        Купить
+      </a>
+    </div>
+
+  </div>
+`;
+
+
+  document.querySelector('.thought-modal').classList.add('active');
+}
+
+/* ====== ЗАКРЫТИЕ ОКНА ====== */
+
+document.querySelector('.thought-close').addEventListener('click', () => {
+  document.querySelector('.thought-modal').classList.remove('active');
+});
+/* ====== 4 карточка с криминалом */
+(function() {
+
+  async function loadCrime() {
+
+    const url = "https://api.rss2json.com/v1/api.json?rss_url=https://tass.ru/rss/v2.xml";
+
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+
+      // --- БЕРЁМ СЛУЧАЙНУЮ НОВОСТЬ ---
+      const items = data.items;
+      const item = items[Math.floor(Math.random() * items.length)];
+
+      const title = item.title;
+      const desc = item.description;
+      const link = item.link;
+
+      // --- КАРТИНКА ---
+      const thumbnail =
+        (item.enclosure && item.enclosure.link) ? item.enclosure.link :
+        (item.thumbnail || "");
+
+      // --- КАРТОЧКА ---
+      const cell = document.querySelector(".crime-card");
+      if (!cell) return;
+
+      // --- ВЫВОД В КАРТОЧКУ ---
+      if (!thumbnail) {
+        cell.innerHTML = `
+          <div style="font-weight:bold; font-size:20px; margin-bottom:6px; line-height:1.0;">
+            ${title}
+          </div>
+          <div style="font-size:18px; line-height:1.0;">
+            ${desc}
+          </div>
+        `;
+      } else {
+        cell.innerHTML = `
+          <div style="font-weight:bold; font-size:13px; margin-bottom:6px; line-height:1.2;">
+            ${title}
+          </div>
+
+          <img src="${thumbnail}" style="
+            width:50px;
+            height:50px;
+            float:right;
+            margin-left:6px;
+            margin-bottom:4px;
+        	">
+
+          <div style="font-size: 20px; line-height:1.0;">
+            ${desc}
+          </div>
+        `;
+      }
+
+      // --- КЛИК ПО КАРТОЧКЕ → ОТКРЫВАЕМ МОДАЛКУ ---
+      cell.addEventListener("click", function() {
+        openCrimeModal({ title, desc, thumbnail, link });
+      });
+
+    } catch (e) {
+      console.log("Ошибка RSS:", e);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", loadCrime);
+
+})();
+
+
+// ======================================================
+// === МОДАЛЬНОЕ ОКНО ДЛЯ КРИМИНАЛЬНОЙ НОВОСТИ ============
+// ======================================================
+
+function openCrimeModal({ title, desc, thumbnail, link }) {
+
+  const modal = document.querySelector(".thought-modal");
+  const modalContent = document.querySelector("#thoughtText");
+
+  if (!modal || !modalContent) return;
+
+  // --- ФОРМИРУЕМ ТЕКСТ В МОДАЛКЕ ---
+  modalContent.innerHTML = `
+    <div style="font-weight:bold; font-size:22px; margin-bottom:10px;">
+      ${title}
+    </div>
+
+    ${thumbnail ? `
+      <img src="${thumbnail}" style="
+        width:120px;
+        height:120px;
+        float:right;
+        margin-left:10px;
+        border-radius:6px;
+      ">
+    ` : ""}
+
+    <div style="font-size:17px; line-height:1.1; margin-top:10px;">
+      ${desc}
+    </div>
+
+    <div style="margin-top:15px;">
+      <a href="${link}" target="_blank" style="
+        font-size:16px;
+        color:#8b0000;
+        text-decoration:underline;
+      ">Читать полностью…</a>
+    </div>
+  `;
+
+  // --- ПОКАЗЫВАЕМ МОДАЛКУ ---
+  modal.classList.add("active");
+}
+
+
+// --- КНОПКА ЗАКРЫТИЯ ---
+document.querySelector(".thought-close").addEventListener("click", () => {
+  document.querySelector(".thought-modal").classList.remove("active");
+});
+
+// --- ЗАКРЫТИЕ ПО КЛИКУ ВНЕ ОКНА ---
+document.querySelector(".thought-modal").addEventListener("click", (e) => {
+  if (e.target.classList.contains("thought-modal")) {
+    e.target.classList.remove("active");
+  }
+});
