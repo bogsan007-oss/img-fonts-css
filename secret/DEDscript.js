@@ -106,7 +106,7 @@ function animateVisualizer() {
         // Делим на 255, получаем от 0.0 до 1.0.
         // Умножаем на 0.6, чтобы искусственно уменьшить максимальную высоту столбика (приглушить басы).
         const rawValue = dataArray[dataIndex] / 255;
-        const barHeight = rawValue * 0.6; // Множитель 0.6 уберет зашкаливание
+        const barHeight = rawValue * 1.2; // Множитель 0.6 уберет зашкаливание
 
         // Применяем трансформацию
         bar.style.transform = `scaleY(${Math.max(barHeight, 0.1)})`;
