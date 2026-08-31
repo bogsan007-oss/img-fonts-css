@@ -102,10 +102,10 @@ function animateVisualizer() {
         const dataIndex = Math.floor((invertedIndex / bars.length) * (bufferLength / 2.5));
         
         // --- ПОЧЕМУ ОНИ ЗАШКАЛИВАЛИ И КАК ИСПРАВИТЬ ---
-        // Значение dataArray[dataIndex] от 0 до 255.
+        // Значение dataArray[dataIndex] от 0 до 175.
         // Делим на 255, получаем от 0.0 до 1.0.
         // Умножаем на 0.6, чтобы искусственно уменьшить максимальную высоту столбика (приглушить басы).
-        const rawValue = dataArray[dataIndex] / 255;
+        const rawValue = dataArray[dataIndex] / 175;
         const barHeight = rawValue * 0.6; // Множитель 0.6 уберет зашкаливание
 
         // Применяем трансформацию
