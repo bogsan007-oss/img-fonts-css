@@ -25,7 +25,7 @@ const playlist = window.myPlaylist || [];
 const radioStations = [
     { name: "Русское волна",        src: "https://ru1.amgradio.ru/RuWave48?7aa4" },
     { name: "Новое радио",          src: "https://stream.newradio.ru/novoe96.aacp?9167" },
-    { name: "Авторадио",            src: "https://pub0201.101.ru/stream/air/aac/64/100?7b4b6666" },
+    { name: "Авторадио",            src: "https://gpm.hostingradio.ru/gpm-avtoradio495.aacp" },
     { name: "Радио Родных Дорог",    src: "https://stream1.radiord.ru:8000/live128.mp3?e5f1" },
     { name: "Шансон",               src: "https://chanson.hostingradio.ru:8041/chanson256.mp3" },
     { name: "Русское радио",        src: "https://rusradio.hostingradio.ru/rusradio96.aacp?67c24" },
