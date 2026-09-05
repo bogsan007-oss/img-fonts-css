@@ -351,8 +351,8 @@ renderPlaylist();
 
         thoughtText.innerHTML = `
             <div style="display:flex; align-items:flex-start; gap:15px;">
-                <img src="${item.img}" style="width:150px; height:150px; border-radius:6px; flex-shrink:0; object-fit:cover;">
-                <div style="font-size:22px; line-height:1.3; text-align:left;">
+                <img src="${item.img}" style="width:100px; height:100px; border-radius:6px; flex-shrink:0; object-fit:cover;">
+                <div style="font-size:18px; line-height:1.0; text-align:left;">
                     <b>${item.title}</b><br><br>
                     Цена: <b>${item.price}</b><br>
                     <span style="text-decoration:line-through; color:#888;">${item.oldPrice}</span><br>
