@@ -30,7 +30,7 @@ const radioStations = [
     { name: "Шансон",               src: "https://chanson.hostingradio.ru:8041/chanson256.mp3" },
     { name: "Русское радио",        src: "https://rusradio.hostingradio.ru/rusradio96.aacp?67c24" },
     { name: "Монте карло",          src: "https://montecarlo.hostingradio.ru/montecarlo96.aacp?acac" },
-    { name: "Европа плюс",          src: "https://pub0201.101.ru/stream/air/aac/64/100?7b4b6666" },
+    { name: "Европа плюс",          src: "https://emgregion.hostingradio.ru:8064/moscow.europaplus.mp3" },
     { name: "Эльдорадо радио",      src: "https://emgspb.hostingradio.ru/eldoradio128.mp3?e139a94b" },
     { name: "Шоколад радио",        src: "https://choco.hostingradio.ru:10010/fm?0665d328" },
     { name: "Радио Максимум",       src: "http://maximum.hostingradio.ru/maximum96.aacp" },
