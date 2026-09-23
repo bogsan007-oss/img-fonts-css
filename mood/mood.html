@@ -1,1 +1,185 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Музыкальный доктор</title>
+    <link rel="stylesheet" href="mood.css">
+</head>
 
+<body>
+    <div class="container">
+
+        <!-- ВЕРХ: описание + персонаж -->
+        <div class="intro">
+            <div class="intro-text">
+                <h2>Музыкальный доктор</h2>
+                <p>
+                    Музыкотерапия — это мягкий способ помочь себе через звук. 
+                    Выберите состояние, которое вы хотите улучшить, и цвет, который 
+                    отражает ваше внутреннее ощущение. Музыка работает лучше всего, 
+                    когда вы слушаете в наушниках и ничто не отвлекает. Здоровья вам.
+                </p>
+            </div>
+            <div class="intro-img">
+                <img src="music therapy.webp" alt="Персонаж" />
+            </div>
+        </div>
+
+        <!-- НИЗ: две колонки -->
+        <div class="bottom-layout">
+
+            <!-- ЛЕВАЯ КОЛОНКА: выбор -->
+            <div class="left-panel highlight-left">
+
+                <!-- Блок состояния -->
+                <div class="block">
+                    <div class="label">Что вас беспокоит?</div>
+
+                    <div class="mood-buttons">
+
+                        <!-- 1. СТРЕСС -->
+                        <a class="main-item" href="javascript:void(0);" tabindex="1">Стресс</a>
+                        <ul class="sub-menu">
+                            <li><a data-sub="stress-soft">Мягкий стресс</a></li>
+                            <li><a data-sub="stress-medium">Средний стресс</a></li>
+                            <li><a data-sub="stress-strong">Сильный стресс</a></li>
+                        </ul>
+
+                        <!-- 2. УСТАЛОСТЬ -->
+                        <a class="main-item" href="javascript:void(0);" tabindex="1">Усталость</a>
+                        <ul class="sub-menu">
+                            <li><a data-sub="fatigue-light">Лёгкая усталость</a></li>
+                            <li><a data-sub="fatigue-strong">Сильная усталость</a></li>
+                            <li><a data-sub="fatigue-empty">Опустошение</a></li>
+                        </ul>
+
+                        <!-- 3. ТРЕВОГА -->
+                        <a class="main-item" href="javascript:void(0);" tabindex="1">Тревога</a>
+                        <ul class="sub-menu">
+                            <li><a data-sub="anxiety-light">Лёгкая тревога</a></li>
+                            <li><a data-sub="anxiety-medium">Средняя тревога</a></li>
+                            <li><a data-sub="anxiety-strong">Сильная тревога</a></li>
+                        </ul>
+
+                        <!-- 4. БЕССОННИЦА -->
+                        <a class="main-item" href="javascript:void(0);" tabindex="1">Бессонница</a>
+                        <ul class="sub-menu">
+                            <li><a data-sub="insomnia-light">Лёгкая бессонница</a></li>
+                            <li><a data-sub="insomnia-thoughts">Мысли мешают</a></li>
+                            <li><a data-sub="insomnia-night">Ночная тревога</a></li>
+                        </ul>
+
+                        <!-- 5. ПЕЧАЛЬ -->
+                        <a class="main-item" href="javascript:void(0);" tabindex="1">Печаль</a>
+                        <ul class="sub-menu">
+                            <li><a data-sub="sad-quiet">Тихая грусть</a></li>
+                            <li><a data-sub="sad-heavy">Тяжёлая печаль</a></li>
+                            <li><a data-sub="sad-lonely">Одиночество в печали</a></li>
+                        </ul>
+
+                        <!-- 6. ОДИНОЧЕСТВО -->
+                        <a class="main-item" href="javascript:void(0);" tabindex="1">Одиночество</a>
+                        <ul class="sub-menu">
+                            <li><a data-sub="lonely-light">Лёгкое одиночество</a></li>
+                            <li><a data-sub="lonely-deep">Глубокое одиночество</a></li>
+                            <li><a data-sub="lonely-anxiety">Одиночество + тревога</a></li>
+                        </ul>
+
+                        <!-- 7. ВНУТРЕННЕЕ НАПРЯЖЕНИЕ -->
+                        <a class="main-item" href="javascript:void(0);" tabindex="1">Внутреннее напряжение</a>
+                        <ul class="sub-menu">
+                            <li><a data-sub="tension-light">Лёгкое напряжение</a></li>
+                            <li><a data-sub="tension-medium">Среднее напряжение</a></li>
+                            <li><a data-sub="tension-strong">Сильное напряжение</a></li>
+                        </ul>
+
+                        <!-- 8. ПОТЕРЯ МОТИВАЦИИ -->
+                        <a class="main-item" href="javascript:void(0);" tabindex="1">Потеря мотивации</a>
+                        <ul class="sub-menu">
+                            <li><a data-sub="apathy-light">Лёгкая апатия</a></li>
+                            <li><a data-sub="apathy-medium">Средняя апатия</a></li>
+                            <li><a data-sub="apathy-deep">Глубокая апатия</a></li>
+                        </ul>
+
+                        <!-- 9. ЭМОЦИОНАЛЬНАЯ ПУСТОТА -->
+                        <a class="main-item" href="javascript:void(0);" tabindex="1">Эмоциональная пустота</a>
+                        <ul class="sub-menu">
+                            <li><a data-sub="empty-light">Лёгкая пустота</a></li>
+                            <li><a data-sub="empty-medium">Средняя пустота</a></li>
+                            <li><a data-sub="empty-deep">Глубокая пустота</a></li>
+                        </ul>
+
+                        <!-- 10. ПЕРЕУТОМЛЕНИЕ -->
+                        <a class="main-item" href="javascript:void(0);" tabindex="1">Переутомление</a>
+                        <ul class="sub-menu">
+                            <li><a data-sub="overwork-light">Лёгкое переутомление</a></li>
+                            <li><a data-sub="overwork-strong">Сильное переутомление</a></li>
+                            <li><a data-sub="overwork-exhaustion">Полное истощение</a></li>
+                        </ul>
+
+                    </div>
+                </div>
+
+                <!-- Блок цвета -->
+                <div class="block">
+                    <div class="label">Выберите цвет лечения:</div>
+                    <div class="color-buttons">
+                        <div class="color-item" style="background:#FF3B30" data-color="Красный"></div>
+                        <div class="color-item" style="background:#FFD60A" data-color="Жёлтый"></div>
+                        <div class="color-item" style="background:#FF9500" data-color="Оранжевый"></div>
+                        <div class="color-item" style="background:#34C759" data-color="Зелёный"></div>
+                        <div class="color-item" style="background:#007AFF" data-color="Синий"></div>
+                        <div class="color-item" style="background:#AF52DE" data-color="Фиолетовый"></div>
+                        <div class="color-item" style="background:#1C1C1E" data-color="Чёрный"></div>
+                    </div>
+                </div>
+
+                <!-- Кнопка -->
+                <button class="go-btn">Получить музыкальный рецепт</button>
+            </div>
+
+<!-- ПРАВАЯ КОЛОНКА: сейчас играет -->
+            <div class="right-panel highlight-right">
+			
+			<!-- ВЕРХНИЙ БЛОК: ЭКРАН (пока пустой, здесь будет визуализатор) -->
+                <div id="visualizer-screen">
+                     <div id="audio-waves" class="waves-container">
+                         <div class="wave-circle"></div>
+                         <div class="wave-circle"></div>
+                         <div class="wave-circle"></div>
+						 <!-- Холст для центральной розочки спектра -->
+                         <canvas id="rose-canvas" width="300" height="300"></canvas>
+                     </div>
+                </div>
+                <h3>Ваш музыкальный рецепт</h3>
+                <div id="current-track">
+                    <p><strong>Состояние:</strong> <span id="chosen-mood">не выбрано</span></p>
+                    <p><strong>Цвет терапии:</strong>&nbsp;&nbsp;&nbsp;<span id="chosen-color-text">не выбран</span><span id="chosen-color-circle" class="color-circle"></span></p>
+                    <p><strong>Трек:</strong> <span id="chosen-track">—</span></p>
+					
+					<audio id="audio" crossorigin="anonymous" preload="auto"></audio>
+					<!-- КНОПКА УПРАВЛЕНИЯ (обязательно НАВЕРХУ, вне скрытого блока плеера) -->
+                    <div style="margin-top: 15px;">
+                       <button id="session-toggle-btn" class="go-btn" style="display: none; background-color: #c0392b;">⏸ Пауза сеанса</button>
+                    </div>
+                </div>
+                    
+                    <div id="player-block" class="player-block">
+                        <img id="track-image" class="track-image" src="" alt="cover">
+                        <div class="player-buttons">
+                            <button id="play-btn">▶</button>
+                            <button id="pause-btn">⏸</button>
+                            <button id="stop-btn">■</button>
+                        </div>
+                    </div>
+             </div>
+
+                <div id="result"></div>
+            
+
+        </div>
+
+<script src="mood.js"></script>
+</body>
+</html>
