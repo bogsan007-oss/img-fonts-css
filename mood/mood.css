@@ -82,6 +82,7 @@ body {
 
 .label {
     font-size: 1.1rem;
+	margin-top: 10px;
     margin-bottom: 10px;
     text-align: center;
     color: #e0e0e0;
@@ -415,4 +416,20 @@ img {
         float: none !important;
         margin-bottom: 20px !important;
     }
+}
+/* Плавное растворение для картинки внутри блока intro-img */
+.intro-img img {
+    transition: opacity 1.5s ease-in-out;
+    opacity: 1;
+}
+
+.intro-img img.fade-out {
+    opacity: 0;
+}
+.instruction-text {
+    font-size: 0.85rem;      /* Делаем шрифт немного меньше основного */
+    font-style: italic;     /* Добавляем наклон (курсив) */
+    opacity: 0.8;           /* Делаем цвет чуть мягче, чтобы текст не спорил с главным */
+    margin-top: 10px;       /* Небольшой отступ сверху от основного текста */
+    line-height: 1.4;       /* Комфортная межстрочная высота */
 }
