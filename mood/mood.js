@@ -289,3 +289,33 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 });
+// Список изображений персонажей в наушниках (замените на ваши реальные имена файлов)
+const characterImages = [
+    "music therapy.webp", 
+    "1.webp", 
+    "2.webp", 
+    "3.webp", 
+    "4.webp", 
+    "5.webp", 
+    "6.webp", 
+    "7.webp", 
+    "8.webp"
+];
+
+let currentImgIndex = 0;
+const targetImgElement = document.querySelector(".intro-img img");
+
+if (targetImgElement && characterImages.length > 1) {
+    setInterval(() => {
+        // 1. Плавно гасим текущую картинку
+        targetImgElement.classList.add("fade-out");
+
+        // 2. Через 1.5 секунды меняем источник и плавно проявляем новую
+        setTimeout(() => {
+            currentImgIndex = (currentImgIndex + 1) % characterImages.length;
+            targetImgElement.src = characterImages[currentImgIndex];
+            targetImgElement.classList.remove("fade-out");
+        }, 1500); // Время задержки совпадает с длительностью transition в CSS
+
+    }, 25000); // Интервал смены картинок (25 секунд — спокойно и не отвлекает)
+}
