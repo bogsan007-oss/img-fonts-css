@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // === БАЗА ТРЕКОВ ===
     const trackDatabase = {
-        "Стресс": {
+       "Стресс": {
             title: "Warm Healing Pad",
             url: "https://ded-brodiaga.github.io/music/Pills/WarmHealingPad.mp3"
         },
@@ -34,6 +34,150 @@ document.addEventListener("DOMContentLoaded", function () {
         "Сильный стресс": {
             title: "Serenidad Profunda",
             url: "https://ded-brodiaga.github.io/music/Pills/Serenidad%20Profunda.mp3"
+        },
+		"Усталость": {
+            title: "Warm Rest",
+            url: "https://ded-brodiaga.github.io/music/Pills/Warm%20Rest.mp3"
+        },
+        "Лёгкая усталость": {
+            title: "Warm Rest",
+            url: "https://ded-brodiaga.github.io/music/Pills/Warm%20Rest.mp3"
+        },
+        "Сильная усталость": {
+            title: "Recuperación Suave",
+            url: "https://ded-brodiaga.github.io/music/Pills/Recuperaci%C3%B3n%20Suave.mp3"
+        },
+        "Опустошение": {
+            title: "Warm Sustained Drones",
+            url: "https://ded-brodiaga.github.io/music/Pills/Warm%20Sustained%20Drones.mp3"
+        },
+		"Тревога": {
+            title: "Warm Analog Pads",
+            url: "https://ded-brodiaga.github.io/music/Pills/Warm%20Analog%20Pads.mp3"
+        },
+        "Лёгкая тревога": {
+            title: "Warm Analog Pads",
+            url: "https://ded-brodiaga.github.io/music/Pills/Warm%20Analog%20Pads.mp3"
+        },
+        "Средняя тревога": {
+            title: "Warm Analog Pulse",
+            url: "https://ded-brodiaga.github.io/music/Pills/Warm%20Analog%20Pulse.mp3"
+        },
+        "Сильная тревога": {
+            title: "Serenidad Profunda",
+            url: "https://ded-brodiaga.github.io/music/Pills/Serenidad%20Profunda.mp3"
+        },
+		"Бессонница": {
+            title: "Slow Breathing",
+            url: "https://ded-brodiaga.github.io/music/Pills/Slow%20Breathing.mp3"
+        },
+        "Лёгкая бессонница": {
+            title: "Slow Breathing",
+            url: "https://ded-brodiaga.github.io/music/Pills/Slow%20Breathing.mp3"
+        },
+        "Мысли мешают": {
+            title: "Deep Sleep Drift",
+            url: "https://ded-brodiaga.github.io/music/Pills/Deep%20Sleep%20Drift.mp3"
+        },
+        "Ночная тревога": {
+            title: "Stillness in the Air",
+            url: "https://ded-brodiaga.github.io/music/Pills/Stillness%20in%20the%20Air.mp3"
+        },
+		"Печаль": {
+            title: "Safe and Comforting",
+            url: "https://ded-brodiaga.github.io/music/Pills/Safe%20and%20Comforting.mp3"
+        },
+        "Одиночество в печали": {
+            title: "Safe and Comforting",
+            url: "https://ded-brodiaga.github.io/music/Pills/Safe%20and%20Comforting.mp3"
+        },
+        "Тихая грусть": {
+            title: "Calm Reassurance",
+            url: "https://ded-brodiaga.github.io/music/Pills/Calm%20Reassurance.mp3"
+        },
+        "Тяжёлая печаль": {
+            title: "Warmth in the Waves",
+            url: "https://ded-brodiaga.github.io/music/Pills/Warmth%20in%20the%20Waves.mp3"
+        },
+		"Одиночество": {
+            title: "Safe Haven",
+            url: "https://ded-brodiaga.github.io/music/Pills/Safe%20Haven.mp3"
+        },
+        "Лёгкое одиночество": {
+            title: "Safe Haven",
+            url: "https://ded-brodiaga.github.io/music/Pills/Safe%20Haven.mp3"
+        },
+        "Одиночество + тревога": {
+            title: "Grounding Waves",
+            url: "https://ded-brodiaga.github.io/music/Pills/Grounding%20Waves.mp3"
+        },
+        "Глубокое одиночество": {
+            title: "Healing Atmosphere",
+            url: "https://ded-brodiaga.github.io/music/Pills/Healing%20Atmosphere.mp3"
+        },
+		"Внутреннее напряжение": {
+            title: "Tranquil Waves",
+            url: "https://ded-brodiaga.github.io/music/Pills/Tranquil%20Waves.mp3"
+        },
+        "Лёгкое напряжение": {
+            title: "Tranquil Waves",
+            url: "https://ded-brodiaga.github.io/music/Pills/Tranquil%20Waves.mp3"
+        },
+        "Среднее напряжение": {
+            title: "Gradual Swells",
+            url: "https://ded-brodiaga.github.io/music/Pills/Gradual%20Swells.mp3"
+        },
+        "Сильное напряжение": {
+            title: "Meditative Grounding",
+            url: "https://ded-brodiaga.github.io/music/Pills/Meditative%20Grounding.mp3"
+        },
+		"Потеря мотивации": {
+            title: "Cozy Uplift",
+            url: "https://ded-brodiaga.github.io/music/Pills/Cozy%20Uplift.mp3"
+        },
+        "Лёгкая апатия": {
+            title: "Cozy Uplift",
+            url: "https://ded-brodiaga.github.io/music/Pills/Cozy%20Uplift.mp3"
+        },
+        "Средняя апатия": {
+            title: "Warm Sustained Drones",
+            url: "https://ded-brodiaga.github.io/music/Pills/Warm%20Sustained%20Drones.mp3"
+        },
+        "Глубокая апатия": {
+            title: "Safe Grounded",
+            url: "https://ded-brodiaga.github.io/music/Pills/Safe%20Grounded.mp3"
+        },
+		"Эмоциональная пустота": {
+            title: "Warm Analog Pads",
+            url: "https://ded-brodiaga.github.io/music/Pills/Warm%20Analog%20Pads.mp3"
+        },
+        "Лёгкая пустота": {
+            title: "Warm Analog Pads",
+            url: "https://ded-brodiaga.github.io/music/Pills/Warm%20Analog%20Pads.mp3"
+        },
+        "Средняя пустота": {
+            title: "Suspended Warmth",
+            url: "https://ded-brodiaga.github.io/music/Pills/Suspended%20Warmth.mp3"
+        },
+        "Глубокая пустота": {
+            title: "Gradual Healing",
+            url: "https://ded-brodiaga.github.io/music/Pills/Gradual%20Healing.mp3"
+        },
+		"Переутомление": {
+            title: "Cozy Analog Pads",
+            url: "https://ded-brodiaga.github.io/music/Pills/Cozy%20Analog%20Pads.mp3"
+        },
+        "Лёгкое переутомление": {
+            title: "Cozy Analog Pads",
+            url: "https://ded-brodiaga.github.io/music/Pills/Cozy%20Analog%20Pads.mp3"
+        },
+        "Сильное переутомление": {
+            title: "Calm Release",
+            url: "https://ded-brodiaga.github.io/music/Pills/Calm%20Release.mp3"
+        },
+        "Полное истощение": {
+            title: "Gradual Recovery",
+            url: "https://ded-brodiaga.github.io/music/Pills/Gradual%20Recovery.mp3"
         }
     };
 
@@ -296,7 +440,6 @@ const characterImages = [
     "2.webp", 
     "3.webp", 
     "4.webp", 
-    "5.webp", 
     "6.webp", 
     "7.webp", 
     "8.webp"
