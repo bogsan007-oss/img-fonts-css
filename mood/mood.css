@@ -332,11 +332,6 @@ img {
     animation: ripple-out 3.5s infinite linear;
 }
 
-.wave-circle:nth-child(1) { animation-delay: 0s; }
-.wave-circle:nth-child(2) { animation-delay: 1.2s; }
-.wave-circle:nth-child(3) { animation-delay: 2.4s; }
-
-/* 3. Анимация расхождения из центра */
 @keyframes ripple-out {
     0% {
         width: 60px;
@@ -352,6 +347,22 @@ img {
         opacity: 0;   
     }
 }
+
+@keyframes colorCycle {
+    0% { filter: hue-rotate(0deg); }
+    50% { filter: hue-rotate(180deg); }
+    100% { filter: hue-rotate(360deg); }
+}
+
+/* Применяем анимацию волн и плавный перелив цвета */
+.wave-circle {
+    animation: ripple-out 4s infinite linear, colorCycle 15s infinite linear;
+}
+
+.wave-circle:nth-child(1) { animation-delay: 0s; }
+.wave-circle:nth-child(2) { animation-delay: 1.2s; }
+.wave-circle:nth-child(3) { animation-delay: 2.4s; }
+
 #rose-canvas {
     position: absolute;
     top: 50%;
