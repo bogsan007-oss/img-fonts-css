@@ -1,0 +1,407 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: #292929;
+    color: #e0e0e0;
+}
+
+.container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 15px;
+    background: #2f2f2f; /* чуть светлее, чтобы блок выделялся */
+    border-radius: 10px;
+	height: auto !important;
+}
+.bottom-layout {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.left-panel,
+.right-panel {
+    flex: 1;
+}
+
+/* ВРЕМЕННО, чтобы было видно структуру */
+.highlight-left {
+    background: rgba(0, 255, 0, 0.08);
+}
+
+.highlight-right {
+    background: rgba(0, 0, 255, 0.08);
+}
+
+.intro {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.intro-text {
+    flex: 1;
+}
+
+.intro-text h2 {
+    margin: 0 0 10px 0;
+    color: #ffffff;
+}
+
+.intro-text p {
+    margin: 0;
+    color: #e0e0e0;
+    line-height: 1.4;
+}
+
+.intro-img img {
+    width: 120px;
+    height: auto;
+    border-radius: 10px;
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+    .intro {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .intro-img img {
+        width: 150px;
+        margin-top: 10px;
+    }
+}
+
+.block {
+    margin-bottom: 25px;
+}
+
+.label {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #e0e0e0;
+}
+.sub-menu {
+    display: none;
+    margin: 5px 0 10px 0;
+    padding: 0;
+    list-style: none;
+    background: #2f2f2f;
+    border: 1px solid #505050;
+    border-radius: 8px;
+}
+
+.sub-menu li a {
+    display: block;
+    padding: 8px 10px;
+    color: #e0e0e0;
+    cursor: pointer;
+}
+
+.sub-menu li a:hover {
+    background: #3a3a3a;
+}
+
+/* Открытие меню */
+.main-item:focus + .sub-menu,
+.main-item:active + .sub-menu,
+.sub-menu:hover {
+    display: block;
+}
+
+/* Стили кнопки */
+.main-item {
+    display: block;
+    width: 240px;
+    margin: 0 auto;
+    padding: 12px;
+    background: #3a3a3a;
+    color: #fff;
+    border: 1px solid #505050;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+}
+
+/* Кнопки настроения */
+.mood-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.mood-buttons button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #505050;
+    border-radius: 8px;
+    background: #3a3a3a;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.mood-buttons button:hover {
+    background: #4a4a4a;
+}
+
+/* Цветовые кнопки */
+.color-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.color-buttons div {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 4px solid #505050; /* заменил светлую обводку */
+}
+
+/* Кнопка результата */
+.go-btn {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+    border: 1px solid #5a5a5a;
+    border-radius: 8px;
+    background: #444444;
+    color: white;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+img {
+    width: 100%;
+    height: auto;
+    margin-top: 15px;
+    border-radius: 10px;
+}
+.color-circle {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid #666;
+    margin-left: 18px; /* ← вот он, отступ */
+}
+#player-block {
+    display: none !important;
+    align-items: center;
+    justify-content: space-between;
+    background: #1a1a1a;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.track-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.player-buttons button {
+    background: #333;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    margin-left: 6px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+/* Верхний блок — экран / визуализатор */
+#visualizer-screen {
+    width: 100%;
+    flex-grow: 1;
+    background: transparent;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    
+    /* Базовая тень-свечение по периметру (по умолчанию нейтральная/темная) */
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05), 0 0 15px rgba(0, 0, 0, 0.5);
+    transition: box-shadow 0.5s ease; /* Плавный переход при смене цвета */
+}
+
+/* Класс для активной пульсации выбранным цветом */
+.glowing-screen {
+    position: relative; /* Обязательно для корректного наложения */
+    overflow: hidden;   /* Чтобы свечение не вылезало за скругленные углы блока */
+    box-shadow: inset 0 0 50px var(--glow-color-bright), 
+                inset 0 0 100px var(--glow-color-dim) !important;
+    transition: box-shadow 0.6s ease-in-out;
+}
+
+@keyframes pulse-glow {
+    0% {
+        /* Тусклая фаза дыхания */
+        box-shadow: inset 0 0 25px var(--glow-color-dim), 0 0 10px var(--glow-color-dim);
+    }
+    50% {
+        /* Яркая фаза дыхания */
+        box-shadow: inset 0 0 35px var(--glow-color-bright), 0 0 25px var(--glow-color-bright);
+    }
+    100% {
+        /* Возврат к тусклой */
+        box-shadow: inset 0 0 25px var(--glow-color-dim), 0 0 10px var(--glow-color-dim);
+    }
+}
+/* Правая колонка — вертикальный флекс-контейнер */
+.right-panel.highlight-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+/* Экран визуализатора (сверху) */
+#visualizer-screen {
+    width: 100%;
+    height: 260px; /* Фиксируем высоту экрана, чтобы он не пропадал */
+    background: transparent;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Панель рецепта (снизу) */
+#recipe-panel {
+    width: 100%;
+    box-sizing: border-box;
+}
+/* 1. Контейнер строго по центру экрана */
+.waves-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Центрирует точку отсчета ровно в середину */
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0; /* При загрузке полностью невидимы */
+    visibility: hidden; /* Дополнительно прячем от глаз */
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+    z-index: 1; /* Под будущей розочкой, но над фоном */
+}
+
+/* Когда музыка играет — показываем */
+.waves-container.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* 2. Сама волна-шлейф */
+.wave-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Центрируем сам круг относительно центра */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    
+    /* Градиент: пустой центр для розочки, яркий шлейф и затухание */
+    background: radial-gradient(circle, 
+        rgba(52, 152, 219, 0) 30px,     
+        rgba(52, 152, 219, 0.6) 120px,  
+        rgba(52, 152, 219, 0) 250px   
+    );
+    
+    border: none;
+    animation: ripple-out 3.5s infinite linear;
+}
+
+.wave-circle:nth-child(1) { animation-delay: 0s; }
+.wave-circle:nth-child(2) { animation-delay: 1.2s; }
+.wave-circle:nth-child(3) { animation-delay: 2.4s; }
+
+/* 3. Анимация расхождения из центра */
+@keyframes ripple-out {
+    0% {
+        width: 60px;
+        height: 60px;
+        opacity: 0;
+    }
+    25% {
+        opacity: 1; 
+    }
+    100% {
+        width: 500px;
+        height: 500px;
+        opacity: 0;   
+    }
+}
+#rose-canvas {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    pointer-events: none;
+    z-index: 2; /* Поверх фона, но под текстом если есть */
+}
+/* ==========================================================
+   Адаптивная мобильная версия (для экранов шириной до 768px)
+   ========================================================== */
+@media screen and (max-width: 768px) {
+    html, body {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 100% !important;
+        overflow: auto !important;     /* Возвращаем нормальный скролл браузеру */
+        position: static !important;
+        background: #292929 !important;
+    }
+
+    .container {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        padding: 10px !important;
+        box-sizing: border-box !important;
+    }
+
+    .bottom-layout {
+        display: flex !important;
+        flex-direction: column !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    .left-panel, 
+    .right-panel {
+        width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        float: none !important;
+        margin-bottom: 20px !important;
+    }
+}
