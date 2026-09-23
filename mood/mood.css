@@ -365,7 +365,7 @@ img {
 /* ==========================================================
    Адаптивная мобильная версия (для экранов шириной до 768px)
    ========================================================== */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 600px) {
     html, body {
         width: 100% !important;
         height: auto !important;
