@@ -435,13 +435,13 @@ img {
 }
 .doctor-intro{
 display:flex;
-gap:25px;
+gap:15px;
 align-items:flex-start;
 background:#2b2b2b;
 border:1px solid #3a3a3a;
 border-radius:10px;
-padding:20px;
-margin-bottom:20px;
+padding:10px;
+margin-bottom:10px;
 }
  
 .doctor-text{
