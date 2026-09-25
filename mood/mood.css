@@ -36,7 +36,7 @@ body {
 
 .intro {
     display: flex;
-    align-items: center;
+    align-items: top;
     justify-content: space-between;
     gap: 15px;
     margin-bottom: 25px;
