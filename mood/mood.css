@@ -453,17 +453,17 @@ color:#f0d17d;
 font-size:20px;
 font-weight:bold;
 line-height:1.5;
-margin-bottom:15px;
+margin-bottom:10px;
 }
  
 .doctor-text p {
-margin: 0 0 15px 0;
+margin: 0 0 10px 0;
 line-height: 1.4;
 }
  
 .doctor-text h3{
 color:#d6ac4f;
-margin:20px 0 10px;
+margin:10px 0 10px;
 border-left:4px solid #d6ac4f;
 padding-left:10px;
 }
@@ -471,7 +471,7 @@ padding-left:10px;
 .doctor-note{
 background:#343434;
 border-left:4px solid #4caf50;
-padding:12px;
+padding:8px;
 border-radius:6px;
 color:#e5e5e5;
 font-style:italic;
@@ -481,13 +481,13 @@ font-style:italic;
 background:#303030;
 border:1px solid #4a4a4a;
 border-radius:8px;
-padding:15px;
+padding:10px;
 margin-top:20px;
 }
  
 .doctor-steps h4{
 color:#ffd34d;
-margin:0 0 12px;
+margin:0 0 10px;
 }
  
 .doctor-steps ol{
