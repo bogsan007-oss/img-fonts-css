@@ -59,7 +59,7 @@ body {
 
 .intro-img img {
     width: 120px;
-	margin-top: 100px;
+	margin-top: 0px;
     height: auto;
     border-radius: 10px;
 }
@@ -433,71 +433,4 @@ img {
     opacity: 0.8;           /* Делаем цвет чуть мягче, чтобы текст не спорил с главным */
     margin-top: 10px;       /* Небольшой отступ сверху от основного текста */
     line-height: 1.4;       /* Комфортная межстрочная высота */
-}
-.doctor-intro{
-display:flex;
-gap:15px;
-align-items:flex-start;
-background:#2b2b2b;
-border:1px solid #3a3a3a;
-border-radius:10px;
-padding:10px;
-margin-bottom:10px;
-}
- 
-.doctor-text{
-flex:1;
-}
- 
-.doctor-lead{
-color:#f0d17d;
-font-size:20px;
-font-weight:bold;
-line-height:1.5;
-margin-bottom:10px;
-}
- 
-.doctor-text p {
-margin: 0 0 10px 0;
-line-height: 1.4;
-}
- 
-.doctor-text h3{
-color:#d6ac4f;
-margin:10px 0 10px;
-border-left:4px solid #d6ac4f;
-padding-left:10px;
-}
- 
-.doctor-note{
-background:#343434;
-border-left:4px solid #4caf50;
-padding:8px;
-border-radius:6px;
-color:#e5e5e5;
-font-style:italic;
-}
- 
-.doctor-steps{
-background:#303030;
-border:1px solid #4a4a4a;
-border-radius:8px;
-padding:10px;
-margin-top:20px;
-}
- 
-.doctor-steps h4{
-color:#ffd34d;
-margin:0 0 10px;
-}
- 
-.doctor-steps ol{
-margin:0;
-padding-left:22px;
-}
- 
-.doctor-steps li{
-color:#e0e0e0;
-margin-bottom:8px;
-line-height:1.5;
 }
