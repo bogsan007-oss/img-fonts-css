@@ -428,9 +428,33 @@ img {
     opacity: 0;
 }
 .instruction-text {
-    font-size: 0.85rem;      /* Делаем шрифт немного меньше основного */
-    font-style: italic;     /* Добавляем наклон (курсив) */
+    font-size: 1.01rem;      /* Делаем шрифт немного меньше основного */
+    font-style: italic;	/* Добавляем наклон (курсив) */
+	color: #ffdc6d !important;
     opacity: 0.8;           /* Делаем цвет чуть мягче, чтобы текст не спорил с главным */
     margin-top: 10px;       /* Небольшой отступ сверху от основного текста */
     line-height: 1.4;       /* Комфортная межстрочная высота */
 }
+.doctor-steps{
+background:#303030;
+border:1px solid #4a4a4a;
+border-radius:8px;
+padding:5px;
+margin-top:10px;
+}
+.doctor-steps{
+font-size: 0.85rem;	
+color:#d0ff4d !important;
+margin:0 0 8px;
+}
+ 
+.doctor-steps ol{
+margin:0;
+padding-left:12px;
+}
+ 
+.doctor-steps li{
+color:#e0e0e0;
+margin-bottom:8px;
+line-height:1.5;
+} 
