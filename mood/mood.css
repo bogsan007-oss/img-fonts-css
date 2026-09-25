@@ -448,13 +448,6 @@ margin-bottom:10px;
 flex:1;
 }
  
-.doctor-image img{
-width:170px;
-border-radius:10px;
-border:2px solid #444;
-box-shadow:0 0 12px rgba(0,0,0,.5);
-}
- 
 .doctor-lead{
 color:#f0d17d;
 font-size:20px;
@@ -463,10 +456,9 @@ line-height:1.5;
 margin-bottom:15px;
 }
  
-.doctor-text p{
-color:#d8d8d8;
-line-height:1.6;
-margin-bottom:15px;
+.doctor-text p {
+margin: 0 0 15px 0;
+line-height: 1.4;
 }
  
 .doctor-text h3{
