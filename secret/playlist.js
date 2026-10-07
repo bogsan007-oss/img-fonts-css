@@ -1,5 +1,9 @@
 // Отдельный файл с плейлистом треков
 window.myPlaylist = [
+	{ title: "Жизнь это покер", src: "https://files.catbox.moe/do40d2.mp3" },
+    { title: "Журавли", src: "https://files.catbox.moe/2y1v50.mp3" },
+    { title: "Поздравляю себя", src: "https://files.catbox.moe/k6mtu0.mp3" },
+    { title: "Дожить до прыжка", src: "https://files.catbox.moe/2x07fi.mp3" },
 	{ title: "Я так мало в мире значу", src: "https://files.catbox.moe/7exg5i.mp3" },
     { title: "Разговор с собой", src: "https://files.catbox.moe/6cffwi.mp3" },
     { title: "Кукурузник", src: "https://files.catbox.moe/5rmxph.mp3" },
