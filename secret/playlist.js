@@ -1,5 +1,15 @@
 // Отдельный файл с плейлистом треков
 window.myPlaylist = [
+    { title: "Здравствуй я скучаю", src: "https://files.catbox.moe/cerx4i.mp3" },
+    { title: "И лишь один старик молчал", src: "https://files.catbox.moe/ovvabc.mp3" },
+    { title: "Идём по жизни", src: "https://files.catbox.moe/dj1jos.mp3" },
+    { title: "Иду по лезвию ножа", src: "https://files.catbox.moe/a9iblu.mp3" },
+	{ title: "Колымская песня", src: "https://files.catbox.moe/97fm99.mp3" },
+    { title: "Лекарство для души", src: "https://files.catbox.moe/5863i4.mp3" },
+    { title: "Меня судьба била", src: "https://files.catbox.moe/69a5dy.mp3" },
+    { title: "Не дождётесь", src: "https://files.catbox.moe/nvh7yv.mp3" },
+	{ title: "Однажды всё пройдёт", src: "https://files.catbox.moe/k72z2x.mp3" },	
+    { title: "Не бросай в собаку камень", src: "https://files.catbox.moe/bhknux.mp3" },
 	{ title: "Жизнь это покер", src: "https://files.catbox.moe/do40d2.mp3" },
     { title: "Журавли", src: "https://files.catbox.moe/2y1v50.mp3" },
     { title: "Поздравляю себя", src: "https://files.catbox.moe/k6mtu0.mp3" },
