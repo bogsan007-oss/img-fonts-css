@@ -587,41 +587,53 @@ renderPlaylist();
     loadCrime();
 })();
 /* ======================================================
-   4. РЕЦЕПТЫ (RSS) через allorigins.win
+   4. РЕЦЕПТЫ (RSS) через corsproxy.io
 ====================================================== */
 (function() {
     async function loadRecipe() {
-        // 1. Оборачиваем прямой URL RSS-фида в прокси allorigins
+        // 1. Используем corsproxy.io для обхода CORS
         const rssUrl = "http://rezept.brodiaga.com/feeds/posts/default?alt=rss";
-        const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent(rssUrl);
+        const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(rssUrl);
 
         try {
-            // 2. Запрашиваем данные (теперь это чистый XML, а не JSON)
             const response = await fetch(proxyUrl);
+            if (!response.ok) {
+                throw new Error(`HTTP error: ${response.status}`);
+            }
             const xmlText = await response.text();
 
-            // 3. Парсим XML-строку с помощью встроенного в браузер DOMParser
+            // 2. Парсим XML
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(xmlText, "text/xml");
             
-            const items = xmlDoc.querySelectorAll("item");
-            if (!items || items.length === 0) return;
+            // 3. Проверяем, есть ли элементы <item>
+            const items = xmlDoc.getElementsByTagName("item");
+            if (!items || items.length === 0) {
+                console.log("RSS: элементы <item> не найдены.");
+                return;
+            }
 
             // 4. Выбираем случайный элемент
             const randomIndex = Math.floor(Math.random() * items.length);
             const item = items[randomIndex];
 
-            // 5. Извлекаем данные (в RSS они лежат внутри тегов)
-            const title = item.querySelector("title")?.textContent || "Без названия";
-            const link = item.querySelector("link")?.textContent || "#";
+            // 5. Извлекаем данные. Используем getElementsByTagName для надежности
+            const title = item.getElementsByTagName("title")[0]?.textContent || "Без названия";
+            const link = item.getElementsByTagName("link")[0]?.textContent || "#";
             
-            // Картинку в RSS Blogger часто кладёт в тег <media:thumbnail> или в описание
-            let thumbnail = item.querySelector("thumbnail")?.getAttribute("url");
+            // 6. Ищем картинку: сначала в media:thumbnail, потом в description
+            let thumbnail = "";
+            const mediaThumb = item.getElementsByTagName("media:thumbnail")[0];
+            if (mediaThumb) {
+                thumbnail = mediaThumb.getAttribute("url");
+            }
+            
             if (!thumbnail) {
-                // Пытаемся найти первую картинку в описании
-                const description = item.querySelector("description")?.textContent || "";
+                const description = item.getElementsByTagName("description")[0]?.textContent || "";
                 const imgMatch = description.match(/<img[^>]+src=["']([^"']+)["']/i);
-                if (imgMatch) thumbnail = imgMatch[1];
+                if (imgMatch) {
+                    thumbnail = imgMatch[1];
+                }
             }
             // Если картинки нет — ставим заглушку
             if (!thumbnail) {
@@ -630,6 +642,7 @@ renderPlaylist();
                 );
             }
 
+            // 7. Вставляем HTML в блок
             const cell = document.querySelector(".paper-news");
             if (cell) {
                 cell.innerHTML = `
@@ -641,12 +654,11 @@ renderPlaylist();
                         <img class="paper-img" src="${thumbnail}" alt="${title}">
                     </a>
                 `;
+            } else {
+                console.log("RSS: контейнер .paper-news не найден.");
             }
         } catch (e) {
             console.log("Ошибка RSS рецептов:", e);
-            // Можно показать сообщение об ошибке в самом блоке
-            const cell = document.querySelector(".paper-news");
-            if (cell) cell.innerHTML = '<div style="color:#888;font-size:12px;">Не удалось загрузить рецепт</div>';
         }
     }
 
