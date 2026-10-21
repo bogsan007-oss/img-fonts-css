@@ -496,13 +496,11 @@ renderPlaylist();
    ====================================================== */
 (function() {
 
-    async function fetchRss(url) {
-        // Список прокси для перебора
-        const proxies = [
-            "https://api.allorigins.win/raw?url=" + encodeURIComponent(url),
-            "https://api.codetabs.com/v1/proxy/?quest=" + encodeURIComponent(url),
-            "https://corsproxy.io/?url=" + encodeURIComponent(url)
-        ];
+    async function fetchRss() {
+    const r = await fetch('/crime-news.xml');
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    return await r.text();
+}
 
         // 1. Сначала пробуем напрямую (вдруг CORS уже настроен)
         try {
