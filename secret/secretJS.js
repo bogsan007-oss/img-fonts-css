@@ -492,90 +492,44 @@ renderPlaylist();
 
 
 /* ======================================================
-   3. КРИМИНАЛЬНЫЕ НОВОСТИ (RSS) — умная загрузка
+   3. КРИМИНАЛЬНЫЕ НОВОСТИ (RSS) через rss2json
    ====================================================== */
-/* ---------- КРИМИНАЛЬНЫЕ НОВОСТИ (RSS) ---------- */
 (function() {
 
-    async function fetchRss(url) {
-        // 1. Пробуем локальный файл (если настроен GitHub Action)
-        try {
-            const localResp = await fetch('/crime-news.xml');
-            if (localResp.ok) {
-                const text = await localResp.text();
-                if (text.includes("<rss") || text.includes("<item")) return text;
-            }
-        } catch (e) {
-            // локального файла нет — идём дальше
-        }
-
-        // 2. Пробуем напрямую
-        try {
-            const r = await fetch(url);
-            if (r.ok) {
-                const text = await r.text();
-                if (text.includes("<rss") || text.includes("<item")) return text;
-            }
-        } catch (e) {
-            console.log("Прямой запрос не удался:", e.message);
-        }
-
-        // 3. Пробуем прокси
-        const proxies = [
-            "https://api.allorigins.win/raw?url=" + encodeURIComponent(url),
-            "https://api.codetabs.com/v1/proxy/?quest=" + encodeURIComponent(url),
-            "https://corsproxy.io/?url=" + encodeURIComponent(url)
-        ];
-
-        for (const proxy of proxies) {
-            try {
-                console.log("Пробуем прокси:", proxy);
-                const r = await fetch(proxy);
-                if (!r.ok) continue;
-                const text = await r.text();
-                if (text.includes("<rss") || text.includes("<item") || text.includes("<?xml")) {
-                    console.log("Успех через прокси:", proxy);
-                    return text;
-                }
-            } catch (e) {
-                console.log("Ошибка прокси:", e.message);
-            }
-        }
-
-        throw new Error("Все способы не сработали");
-    }
-
     async function loadCrime() {
+        // ВНИМАНИЕ! ВСТАВЬТЕ ВАШ КЛЮЧ В КАВЫЧКИ НИЖЕ:
+        const API_KEY = "uxh5xe1vpvabcvpkcsvm7ikzrsboqmysilfmiqmv"; 
+        
         const rssUrl = "https://www.interfax.ru/rss.asp";
+        const url = "https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(rssUrl) + "&api_key=" + API_KEY;
 
         try {
-            const xmlText = await fetchRss(rssUrl);
+            const response = await fetch(url);
+            const data = await response.json();
 
-            const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(xmlText, "text/xml");
-            const items = xmlDoc.getElementsByTagName("item");
-            if (!items.length) return;
+            if (!data.items || data.items.length === 0) {
+                console.log("RSS: нет новостей");
+                return;
+            }
 
-            const item = items[Math.floor(Math.random() * items.length)];
-            const title = item.getElementsByTagName("title")[0]?.textContent || "Без названия";
-            const link = item.getElementsByTagName("link")[0]?.textContent || "#";
-            const descRaw = item.getElementsByTagName("description")[0]?.textContent || "";
+            // Берем случайную новость
+            const item = data.items[Math.floor(Math.random() * data.items.length)];
 
+            const title = item.title || "Без названия";
+            const link = item.link || "#";
+            
+            // Очищаем описание от HTML-тегов
             const tempDiv = document.createElement("div");
-            tempDiv.innerHTML = descRaw;
+            tempDiv.innerHTML = item.description || "";
             const desc = tempDiv.textContent || tempDiv.innerText || "";
 
-            let thumbnail = "";
-            const enclosure = item.getElementsByTagName("enclosure")[0];
-            if (enclosure) thumbnail = enclosure.getAttribute("url") || "";
-            if (!thumbnail) {
-                const m = descRaw.match(/<img[^>]+src=["']([^"']+)["']/i);
-                if (m) thumbnail = m[1];
-            }
+            // Ищем картинку
+            const thumbnail = (item.enclosure && item.enclosure.link) ? item.enclosure.link : (item.thumbnail || "");
 
             const cell = document.querySelector(".crime-card");
             if (!cell) return;
 
+            // Отрисовываем карточку (ваш старый дизайн)
             if (!thumbnail) {
                 cell.innerHTML = `
                     <div style="font-weight:bold; font-size:20px; margin-bottom:6px; line-height:1.0;">
@@ -604,6 +558,7 @@ renderPlaylist();
                 `;
             }
 
+            // Обработчик клика для модального окна
             cell.addEventListener("click", function(e) {
                 e.preventDefault();
                 openCrimeModal({ title, desc, thumbnail, link });
