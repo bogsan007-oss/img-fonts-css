@@ -511,7 +511,7 @@ renderPlaylist();
 
     async function loadCrime() {
         // Русскоязычный криминальный RSS
-        const rssUrl = "https://www.tks.ru/crime.rss";
+        const rssUrl = "https://www.interfax.ru/rss.asp";
 
         try {
             const xmlText = await fetchRss(rssUrl);
