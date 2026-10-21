@@ -492,25 +492,50 @@ renderPlaylist();
 
 
 /* ======================================================
-   3. КРИМИНАЛЬНЫЕ НОВОСТИ (RSS) - КАРТИНКА СЛЕВА
-====================================================== */
+   3. КРИМИНАЛЬНЫЕ НОВОСТИ (RSS) через KillCORS
+   ====================================================== */
 (function() {
     async function loadCrime() {
-        const url = "https://api.rss2json.com/v1/api.json?rss_url=https://tass.ru/rss/v2.xml";
+        const rssUrl = "https://tass.ru/rss/v2.xml";
+        const proxyUrl = "https://proxy.killcors.com?url=" + encodeURIComponent(rssUrl);
 
         try {
-            const response = await fetch(url);
-            const data = await response.json();
+            const response = await fetch(proxyUrl);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
-            const items = data.items;
-            if (!items || items.length === 0) return;
+            const xmlText = await response.text();
 
+            // Разбираем XML
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+            const items = xmlDoc.getElementsByTagName("item");
+            if (!items.length) {
+                console.log("RSS: нет элементов <item>");
+                return;
+            }
+
+            // Берём случайную новость
             const item = items[Math.floor(Math.random() * items.length)];
 
-            const title = item.title;
-            const desc = item.description;
-            const link = item.link;
-            const thumbnail = (item.enclosure && item.enclosure.link) ? item.enclosure.link : (item.thumbnail || "");
+            const title = item.getElementsByTagName("title")[0]?.textContent || "Без названия";
+            const link = item.getElementsByTagName("link")[0]?.textContent || "#";
+            const descRaw = item.getElementsByTagName("description")[0]?.textContent || "";
+
+            // Убираем HTML-теги из описания (TASS часто кладёт их в description)
+            const tempDiv = document.createElement("div");
+            tempDiv.innerHTML = descRaw;
+            const desc = tempDiv.textContent || tempDiv.innerText || "";
+
+            // Картинка: enclosure или первая <img> в описании
+            let thumbnail = "";
+            const enclosure = item.getElementsByTagName("enclosure")[0];
+            if (enclosure) {
+                thumbnail = enclosure.getAttribute("url") || "";
+            }
+            if (!thumbnail) {
+                const m = descRaw.match(/<img[^>]+src=["']([^"']+)["']/i);
+                if (m) thumbnail = m[1];
+            }
 
             const cell = document.querySelector(".crime-card");
             if (!cell) return;
@@ -549,14 +574,13 @@ renderPlaylist();
             });
 
         } catch (e) {
-            console.log("Ошибка RSS:", e);
+            console.log("Ошибка RSS (KillCORS):", e);
         }
     }
 
     function openCrimeModal({ title, desc, thumbnail, link }) {
         const modal = document.querySelector(".thought-modal");
         const modalContent = document.querySelector("#thoughtText");
-
         if (!modal || !modalContent) return;
 
         modalContent.innerHTML = `
@@ -580,11 +604,14 @@ renderPlaylist();
                 <a href="${link}" target="_blank" style="font-size:16px; color:#8b0000; text-decoration:underline;">Читать полностью…</a>
             </div>
         `;
-
         modal.classList.add("active");
     }
 
-    loadCrime();
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadCrime);
+    } else {
+        loadCrime();
+    }
 })();
 
 /* ======================================================
