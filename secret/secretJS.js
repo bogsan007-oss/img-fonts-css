@@ -492,21 +492,52 @@ renderPlaylist();
 
 
 /* ======================================================
-   3. КРИМИНАЛЬНЫЕ НОВОСТИ (RSS) — русский источник
+   3. КРИМИНАЛЬНЫЕ НОВОСТИ (RSS) — умная загрузка
    ====================================================== */
 (function() {
 
     async function fetchRss(url) {
+        // Список прокси для перебора
+        const proxies = [
+            "https://api.allorigins.win/raw?url=" + encodeURIComponent(url),
+            "https://api.codetabs.com/v1/proxy/?quest=" + encodeURIComponent(url),
+            "https://corsproxy.io/?url=" + encodeURIComponent(url)
+        ];
+
+        // 1. Сначала пробуем напрямую (вдруг CORS уже настроен)
         try {
             const r = await fetch(url);
-            if (r.ok) return await r.text();
+            if (r.ok) {
+                const text = await r.text();
+                if (text.includes("<rss") || text.includes("<item")) return text;
+            }
         } catch (e) {
-            console.log("Прямой запрос не удался, пробуем прокси…", e.message);
+            console.log("Прямой запрос не удался:", e.message);
         }
-        const proxy = "https://api.allorigins.win/raw?url=" + encodeURIComponent(url);
-        const r2 = await fetch(proxy);
-        if (!r2.ok) throw new Error(`Proxy HTTP ${r2.status}`);
-        return await r2.text();
+
+        // 2. Перебираем прокси
+        for (const proxy of proxies) {
+            try {
+                console.log("Пробуем прокси:", proxy);
+                const r = await fetch(proxy);
+                if (!r.ok) {
+                    console.log(`Прокси вернул HTTP ${r.status}`);
+                    continue;
+                }
+                const text = await r.text();
+                // Проверяем, что это XML, а не HTML-ошибка
+                if (text.includes("<rss") || text.includes("<item") || text.includes("<?xml")) {
+                    console.log("Успех через прокси:", proxy);
+                    return text;
+                } else {
+                    console.log("Прокси вернул не XML, пропускаем");
+                }
+            } catch (e) {
+                console.log("Ошибка прокси:", e.message);
+            }
+        }
+
+        throw new Error("Все прокси не сработали");
     }
 
     async function loadCrime() {
