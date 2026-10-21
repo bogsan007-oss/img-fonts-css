@@ -497,7 +497,7 @@ renderPlaylist();
 (function() {
     async function loadCrime() {
         const rssUrl = "https://tass.ru/rss/v2.xml";
-        const proxyUrl = "https://proxy.killcors.com?url=" + encodeURIComponent(rssUrl);
+        const proxyUrl = "https://corsfix.com/" + encodeURIComponent(rssUrl);
 
         try {
             const response = await fetch(proxyUrl);
