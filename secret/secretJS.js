@@ -496,7 +496,7 @@ renderPlaylist();
    ====================================================== */
 (function() {
     async function loadCrime() {
-        const rssUrl = "https://tass.ru/rss/v2.xml";
+        const rssUrl = "https://freenewsapi.ai/v1/rss?host=tass.com&size=50";
         const proxyUrl = "https://corsfix.com/" + encodeURIComponent(rssUrl);
 
         try {
