@@ -610,7 +610,44 @@ renderPlaylist();
 /* ======================================================
    4. РЕЦЕПТЫ (JSONP — работает без CORS)
    ====================================================== */
+function showRecipeCard(root) {
+    const cell = document.querySelector(".paper-news");
+    if (!cell) return;
 
+    const posts = root.feed.entry || [];
+    if (!posts.length) {
+        cell.innerHTML = '<div style="color:#888;font-size:12px;">Пока нет рецептов.</div>';
+        return;
+    }
+
+    // Берём случайный рецепт
+    const randomPost = posts[Math.floor(Math.random() * posts.length)];
+
+    const title = randomPost.title.$t || 'Без названия';
+    const link = (randomPost.link || []).find(l => l.rel === 'alternate')?.href || '#';
+
+    // Картинка: сначала media$thumbnail, потом из content
+    let img = randomPost.media$thumbnail?.url || '';
+    if (!img) {
+        const content = randomPost.content?.$t || randomPost.summary?.$t || '';
+        const m = content.match(/<img[^>]+src=["']([^"']+)["']/i);
+        if (m) img = m[1];
+    }
+    if (!img) {
+        img = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+            '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="67"><rect width="100%" height="100%" fill="#333"/><text x="50%" y="50%" fill="#888" font-size="10" text-anchor="middle" dy=".3em">Нет фото</text></svg>'
+        );
+    }
+
+    const shortTitle = title.length > 50 ? title.slice(0, 50) + '…' : title;
+
+    cell.innerHTML = `
+        <div class="paper-title">${shortTitle}</div>
+        <a href="${link}" target="_blank" rel="noopener">
+            <img class="paper-img" src="${img}" alt="${shortTitle}" loading="lazy">
+        </a>
+    `;
+}
 
 // бегущая шкала плеера
 let startTime = 0;
