@@ -586,58 +586,49 @@ renderPlaylist();
 
     loadCrime();
 })();
+
 /* ======================================================
-   4. РЕЦЕПТЫ (RSS) через corsproxy.io
-====================================================== */
-(function() {
-    async function loadRecipe() {
-        const rssUrl = "http://rezept.brodiaga.com/feeds/posts/default?alt=rss";
-        // cors.lol требует параметр ?url= и кодирование
-        const proxyUrl = "https://api.cors.lol/?url=" + encodeURIComponent(rssUrl);
+   4. РЕЦЕПТЫ (JSONP — работает без CORS)
+   ====================================================== */
+function showRecipeCard(root) {
+    const cell = document.querySelector(".paper-news");
+    if (!cell) return;
 
-        try {
-            const response = await fetch(proxyUrl);
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            const xmlText = await response.text();
-
-            const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(xmlText, "text/xml");
-            const items = xmlDoc.getElementsByTagName("item");
-            if (!items.length) return;
-
-            const item = items[Math.floor(Math.random() * items.length)];
-            const title = item.getElementsByTagName("title")[0]?.textContent || "Без названия";
-            const link = item.getElementsByTagName("link")[0]?.textContent || "#";
-            let thumbnail = "";
-            const mediaThumb = item.getElementsByTagName("media:thumbnail")[0];
-            if (mediaThumb) thumbnail = mediaThumb.getAttribute("url");
-            if (!thumbnail) {
-                const desc = item.getElementsByTagName("description")[0]?.textContent || "";
-                const m = desc.match(/<img[^>]+src=["']([^"']+)["']/i);
-                if (m) thumbnail = m[1];
-            }
-            if (!thumbnail) {
-                thumbnail = 'data:image/svg+xml;utf8,' + encodeURIComponent(
-                    '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="67"><rect width="100%" height="100%" fill="#333"/></svg>'
-                );
-            }
-
-            const cell = document.querySelector(".paper-news");
-            if (cell) {
-                cell.innerHTML = `
-                    <div class="paper-title">${title}</div>
-                    <a href="${link}" target="_blank">
-                        <img class="paper-img" src="${thumbnail}" alt="${title}">
-                    </a>
-                `;
-            }
-        } catch (e) {
-            console.log("Ошибка RSS рецептов (cors.lol):", e);
-        }
+    const posts = root.feed.entry || [];
+    if (!posts.length) {
+        cell.innerHTML = '<div style="color:#888;font-size:12px;">Пока нет рецептов.</div>';
+        return;
     }
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', loadRecipe);
-    else loadRecipe();
-})();
+
+    // Берём случайный рецепт
+    const randomPost = posts[Math.floor(Math.random() * posts.length)];
+
+    const title = randomPost.title.$t || 'Без названия';
+    const link = (randomPost.link || []).find(l => l.rel === 'alternate')?.href || '#';
+
+    // Картинка: сначала media$thumbnail, потом из content
+    let img = randomPost.media$thumbnail?.url || '';
+    if (!img) {
+        const content = randomPost.content?.$t || randomPost.summary?.$t || '';
+        const m = content.match(/<img[^>]+src=["']([^"']+)["']/i);
+        if (m) img = m[1];
+    }
+    if (!img) {
+        img = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+            '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="67"><rect width="100%" height="100%" fill="#333"/><text x="50%" y="50%" fill="#888" font-size="10" text-anchor="middle" dy=".3em">Нет фото</text></svg>'
+        );
+    }
+
+    const shortTitle = title.length > 50 ? title.slice(0, 50) + '…' : title;
+
+    cell.innerHTML = `
+        <div class="paper-title">${shortTitle}</div>
+        <a href="${link}" target="_blank" rel="noopener">
+            <img class="paper-img" src="${img}" alt="${shortTitle}" loading="lazy">
+        </a>
+    `;
+}
+
 // бегущая шкала плеера
 let startTime = 0;
 let pauseOffset = 0;
