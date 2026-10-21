@@ -587,24 +587,48 @@ renderPlaylist();
     loadCrime();
 })();
 /* ======================================================
-   4. РЕЦЕПТЫ (RSS)
+   4. РЕЦЕПТЫ (RSS) через allorigins.win
 ====================================================== */
 (function() {
     async function loadRecipe() {
-        const url = "https://api.rss2json.com/v1/api.json?rss_url=http://rezept.brodiaga.com/feeds/posts/default?alt=rss";
+        // 1. Оборачиваем прямой URL RSS-фида в прокси allorigins
+        const rssUrl = "http://rezept.brodiaga.com/feeds/posts/default?alt=rss";
+        const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent(rssUrl);
 
         try {
-            const response = await fetch(url);
-            const data = await response.json();
+            // 2. Запрашиваем данные (теперь это чистый XML, а не JSON)
+            const response = await fetch(proxyUrl);
+            const xmlText = await response.text();
 
-            const items = data.items;
+            // 3. Парсим XML-строку с помощью встроенного в браузер DOMParser
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+            
+            const items = xmlDoc.querySelectorAll("item");
             if (!items || items.length === 0) return;
 
-            const randomItem = items[Math.floor(Math.random() * items.length)];
+            // 4. Выбираем случайный элемент
+            const randomIndex = Math.floor(Math.random() * items.length);
+            const item = items[randomIndex];
 
-            const title = randomItem.title;
-            const link = randomItem.link;
-            const thumbnail = randomItem.thumbnail;
+            // 5. Извлекаем данные (в RSS они лежат внутри тегов)
+            const title = item.querySelector("title")?.textContent || "Без названия";
+            const link = item.querySelector("link")?.textContent || "#";
+            
+            // Картинку в RSS Blogger часто кладёт в тег <media:thumbnail> или в описание
+            let thumbnail = item.querySelector("thumbnail")?.getAttribute("url");
+            if (!thumbnail) {
+                // Пытаемся найти первую картинку в описании
+                const description = item.querySelector("description")?.textContent || "";
+                const imgMatch = description.match(/<img[^>]+src=["']([^"']+)["']/i);
+                if (imgMatch) thumbnail = imgMatch[1];
+            }
+            // Если картинки нет — ставим заглушку
+            if (!thumbnail) {
+                thumbnail = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+                    '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="67"><rect width="100%" height="100%" fill="#333"/><text x="50%" y="50%" fill="#888" font-size="10" text-anchor="middle" dy=".3em">Нет фото</text></svg>'
+                );
+            }
 
             const cell = document.querySelector(".paper-news");
             if (cell) {
@@ -614,17 +638,24 @@ renderPlaylist();
                     </div>
 
                     <a href="${link}" target="_blank">
-                        <img class="paper-img" src="${thumbnail}">
+                        <img class="paper-img" src="${thumbnail}" alt="${title}">
                     </a>
                 `;
             }
         } catch (e) {
             console.log("Ошибка RSS рецептов:", e);
+            // Можно показать сообщение об ошибке в самом блоке
+            const cell = document.querySelector(".paper-news");
+            if (cell) cell.innerHTML = '<div style="color:#888;font-size:12px;">Не удалось загрузить рецепт</div>';
         }
     }
 
-    // Запускаем сразу
-    loadRecipe();
+    // Запуск
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadRecipe);
+    } else {
+        loadRecipe();
+    }
 })();
 // бегущая шкала плеера
 let startTime = 0;
