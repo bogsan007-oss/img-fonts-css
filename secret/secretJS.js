@@ -591,83 +591,52 @@ renderPlaylist();
 ====================================================== */
 (function() {
     async function loadRecipe() {
-        // 1. Используем corsproxy.io для обхода CORS
         const rssUrl = "http://rezept.brodiaga.com/feeds/posts/default?alt=rss";
-        const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(rssUrl);
+        // cors.lol требует параметр ?url= и кодирование
+        const proxyUrl = "https://api.cors.lol/?url=" + encodeURIComponent(rssUrl);
 
         try {
             const response = await fetch(proxyUrl);
-            if (!response.ok) {
-                throw new Error(`HTTP error: ${response.status}`);
-            }
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
             const xmlText = await response.text();
 
-            // 2. Парсим XML
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(xmlText, "text/xml");
-            
-            // 3. Проверяем, есть ли элементы <item>
             const items = xmlDoc.getElementsByTagName("item");
-            if (!items || items.length === 0) {
-                console.log("RSS: элементы <item> не найдены.");
-                return;
-            }
+            if (!items.length) return;
 
-            // 4. Выбираем случайный элемент
-            const randomIndex = Math.floor(Math.random() * items.length);
-            const item = items[randomIndex];
-
-            // 5. Извлекаем данные. Используем getElementsByTagName для надежности
+            const item = items[Math.floor(Math.random() * items.length)];
             const title = item.getElementsByTagName("title")[0]?.textContent || "Без названия";
             const link = item.getElementsByTagName("link")[0]?.textContent || "#";
-            
-            // 6. Ищем картинку: сначала в media:thumbnail, потом в description
             let thumbnail = "";
             const mediaThumb = item.getElementsByTagName("media:thumbnail")[0];
-            if (mediaThumb) {
-                thumbnail = mediaThumb.getAttribute("url");
-            }
-            
+            if (mediaThumb) thumbnail = mediaThumb.getAttribute("url");
             if (!thumbnail) {
-                const description = item.getElementsByTagName("description")[0]?.textContent || "";
-                const imgMatch = description.match(/<img[^>]+src=["']([^"']+)["']/i);
-                if (imgMatch) {
-                    thumbnail = imgMatch[1];
-                }
+                const desc = item.getElementsByTagName("description")[0]?.textContent || "";
+                const m = desc.match(/<img[^>]+src=["']([^"']+)["']/i);
+                if (m) thumbnail = m[1];
             }
-            // Если картинки нет — ставим заглушку
             if (!thumbnail) {
                 thumbnail = 'data:image/svg+xml;utf8,' + encodeURIComponent(
-                    '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="67"><rect width="100%" height="100%" fill="#333"/><text x="50%" y="50%" fill="#888" font-size="10" text-anchor="middle" dy=".3em">Нет фото</text></svg>'
+                    '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="67"><rect width="100%" height="100%" fill="#333"/></svg>'
                 );
             }
 
-            // 7. Вставляем HTML в блок
             const cell = document.querySelector(".paper-news");
             if (cell) {
                 cell.innerHTML = `
-                    <div class="paper-title">
-                        ${title}
-                    </div>
-
+                    <div class="paper-title">${title}</div>
                     <a href="${link}" target="_blank">
                         <img class="paper-img" src="${thumbnail}" alt="${title}">
                     </a>
                 `;
-            } else {
-                console.log("RSS: контейнер .paper-news не найден.");
             }
         } catch (e) {
-            console.log("Ошибка RSS рецептов:", e);
+            console.log("Ошибка RSS рецептов (cors.lol):", e);
         }
     }
-
-    // Запуск
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', loadRecipe);
-    } else {
-        loadRecipe();
-    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', loadRecipe);
+    else loadRecipe();
 })();
 // бегущая шкала плеера
 let startTime = 0;
