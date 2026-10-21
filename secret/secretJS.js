@@ -492,20 +492,32 @@ renderPlaylist();
 
 
 /* ======================================================
-   3. КРИМИНАЛЬНЫЕ НОВОСТИ (RSS) через KillCORS
+   3. КРИМИНАЛЬНЫЕ НОВОСТИ (RSS) с авто-фолбэком
    ====================================================== */
 (function() {
+
+    // Пробуем загрузить напрямую, если не выходит — через allorigins
+    async function fetchRss(url) {
+        // Попытка 1: напрямую
+        try {
+            const r = await fetch(url);
+            if (r.ok) return await r.text();
+        } catch (e) {
+            console.log("Прямой запрос не удался, пробуем прокси…", e.message);
+        }
+        // Попытка 2: через allorigins.win
+        const proxy = "https://api.allorigins.win/raw?url=" + encodeURIComponent(url);
+        const r2 = await fetch(proxy);
+        if (!r2.ok) throw new Error(`Proxy HTTP ${r2.status}`);
+        return await r2.text();
+    }
+
     async function loadCrime() {
         const rssUrl = "https://freenewsapi.ai/v1/rss?host=tass.com&size=50";
-        const proxyUrl = "https://corsfix.com/" + encodeURIComponent(rssUrl);
 
         try {
-            const response = await fetch(proxyUrl);
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const xmlText = await fetchRss(rssUrl);
 
-            const xmlText = await response.text();
-
-            // Разбираем XML
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(xmlText, "text/xml");
             const items = xmlDoc.getElementsByTagName("item");
@@ -514,24 +526,21 @@ renderPlaylist();
                 return;
             }
 
-            // Берём случайную новость
             const item = items[Math.floor(Math.random() * items.length)];
 
             const title = item.getElementsByTagName("title")[0]?.textContent || "Без названия";
             const link = item.getElementsByTagName("link")[0]?.textContent || "#";
             const descRaw = item.getElementsByTagName("description")[0]?.textContent || "";
 
-            // Убираем HTML-теги из описания (TASS часто кладёт их в description)
+            // Чистим HTML из описания
             const tempDiv = document.createElement("div");
             tempDiv.innerHTML = descRaw;
             const desc = tempDiv.textContent || tempDiv.innerText || "";
 
-            // Картинка: enclosure или первая <img> в описании
+            // Картинка
             let thumbnail = "";
             const enclosure = item.getElementsByTagName("enclosure")[0];
-            if (enclosure) {
-                thumbnail = enclosure.getAttribute("url") || "";
-            }
+            if (enclosure) thumbnail = enclosure.getAttribute("url") || "";
             if (!thumbnail) {
                 const m = descRaw.match(/<img[^>]+src=["']([^"']+)["']/i);
                 if (m) thumbnail = m[1];
@@ -574,7 +583,9 @@ renderPlaylist();
             });
 
         } catch (e) {
-            console.log("Ошибка RSS (KillCORS):", e);
+            console.log("Ошибка RSS (криминал):", e);
+            const cell = document.querySelector(".crime-card");
+            if (cell) cell.innerHTML = '<div style="color:#888;font-size:12px;">Не удалось загрузить новость</div>';
         }
     }
 
