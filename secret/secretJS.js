@@ -492,20 +492,17 @@ renderPlaylist();
 
 
 /* ======================================================
-   3. КРИМИНАЛЬНЫЕ НОВОСТИ (RSS) с авто-фолбэком
+   3. КРИМИНАЛЬНЫЕ НОВОСТИ (RSS) — русский источник
    ====================================================== */
 (function() {
 
-    // Пробуем загрузить напрямую, если не выходит — через allorigins
     async function fetchRss(url) {
-        // Попытка 1: напрямую
         try {
             const r = await fetch(url);
             if (r.ok) return await r.text();
         } catch (e) {
             console.log("Прямой запрос не удался, пробуем прокси…", e.message);
         }
-        // Попытка 2: через allorigins.win
         const proxy = "https://api.allorigins.win/raw?url=" + encodeURIComponent(url);
         const r2 = await fetch(proxy);
         if (!r2.ok) throw new Error(`Proxy HTTP ${r2.status}`);
@@ -513,7 +510,8 @@ renderPlaylist();
     }
 
     async function loadCrime() {
-        const rssUrl = "https://freenewsapi.ai/v1/rss?host=tass.com&size=50";
+        // Русскоязычный криминальный RSS
+        const rssUrl = "https://www.tks.ru/crime.rss";
 
         try {
             const xmlText = await fetchRss(rssUrl);
@@ -532,12 +530,10 @@ renderPlaylist();
             const link = item.getElementsByTagName("link")[0]?.textContent || "#";
             const descRaw = item.getElementsByTagName("description")[0]?.textContent || "";
 
-            // Чистим HTML из описания
             const tempDiv = document.createElement("div");
             tempDiv.innerHTML = descRaw;
             const desc = tempDiv.textContent || tempDiv.innerText || "";
 
-            // Картинка
             let thumbnail = "";
             const enclosure = item.getElementsByTagName("enclosure")[0];
             if (enclosure) thumbnail = enclosure.getAttribute("url") || "";
