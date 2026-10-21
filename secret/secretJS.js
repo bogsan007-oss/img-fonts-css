@@ -494,15 +494,22 @@ renderPlaylist();
 /* ======================================================
    3. КРИМИНАЛЬНЫЕ НОВОСТИ (RSS) — умная загрузка
    ====================================================== */
+/* ---------- КРИМИНАЛЬНЫЕ НОВОСТИ (RSS) ---------- */
 (function() {
 
-    async function fetchRss() {
-    const r = await fetch('/crime-news.xml');
-    if (!r.ok) throw new Error(`HTTP ${r.status}`);
-    return await r.text();
-}
+    async function fetchRss(url) {
+        // 1. Пробуем локальный файл (если настроен GitHub Action)
+        try {
+            const localResp = await fetch('/crime-news.xml');
+            if (localResp.ok) {
+                const text = await localResp.text();
+                if (text.includes("<rss") || text.includes("<item")) return text;
+            }
+        } catch (e) {
+            // локального файла нет — идём дальше
+        }
 
-        // 1. Сначала пробуем напрямую (вдруг CORS уже настроен)
+        // 2. Пробуем напрямую
         try {
             const r = await fetch(url);
             if (r.ok) {
@@ -513,33 +520,32 @@ renderPlaylist();
             console.log("Прямой запрос не удался:", e.message);
         }
 
-        // 2. Перебираем прокси
+        // 3. Пробуем прокси
+        const proxies = [
+            "https://api.allorigins.win/raw?url=" + encodeURIComponent(url),
+            "https://api.codetabs.com/v1/proxy/?quest=" + encodeURIComponent(url),
+            "https://corsproxy.io/?url=" + encodeURIComponent(url)
+        ];
+
         for (const proxy of proxies) {
             try {
                 console.log("Пробуем прокси:", proxy);
                 const r = await fetch(proxy);
-                if (!r.ok) {
-                    console.log(`Прокси вернул HTTP ${r.status}`);
-                    continue;
-                }
+                if (!r.ok) continue;
                 const text = await r.text();
-                // Проверяем, что это XML, а не HTML-ошибка
                 if (text.includes("<rss") || text.includes("<item") || text.includes("<?xml")) {
                     console.log("Успех через прокси:", proxy);
                     return text;
-                } else {
-                    console.log("Прокси вернул не XML, пропускаем");
                 }
             } catch (e) {
                 console.log("Ошибка прокси:", e.message);
             }
         }
 
-        throw new Error("Все прокси не сработали");
+        throw new Error("Все способы не сработали");
     }
 
     async function loadCrime() {
-        // Русскоязычный криминальный RSS
         const rssUrl = "https://www.interfax.ru/rss.asp";
 
         try {
@@ -548,13 +554,9 @@ renderPlaylist();
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(xmlText, "text/xml");
             const items = xmlDoc.getElementsByTagName("item");
-            if (!items.length) {
-                console.log("RSS: нет элементов <item>");
-                return;
-            }
+            if (!items.length) return;
 
             const item = items[Math.floor(Math.random() * items.length)];
-
             const title = item.getElementsByTagName("title")[0]?.textContent || "Без названия";
             const link = item.getElementsByTagName("link")[0]?.textContent || "#";
             const descRaw = item.getElementsByTagName("description")[0]?.textContent || "";
