@@ -1,7 +1,7 @@
 // Отдельный файл с плейлистом треков
 window.myPlaylist = [
 	{ title: "Солдат", src: "https://www.dropbox.com/scl/fi/ooo7nbclf1rnz1t342oio/2.wav?rlkey=0xkajtsak8rwicjqxduo0i40v&st=i715in42&raw=1" },
-    { title: "Волк", src: "https://www.dropbox.com/scl/fi/92gfe0punzul90jq3ql1o/2.mp3?rlkey=ov2r799gue8y479y5vll0mkoe&st=zrc4rtm7&raw=1" },
+    { title: "Волк", src: "https://archive.org/download/2_20261026_20261026_1502/%D0%92%D0%BE%D0%BB%D0%BA2.mp3" },
     { title: "Здравствуй я скучаю", src: "https://files.catbox.moe/cerx4i.mp3" },
     { title: "И лишь один старик молчал", src: "https://files.catbox.moe/ovvabc.mp3" },
     { title: "Идём по жизни", src: "https://files.catbox.moe/dj1jos.mp3" },
