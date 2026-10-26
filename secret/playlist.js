@@ -1,6 +1,6 @@
 // Отдельный файл с плейлистом треков
 window.myPlaylist = [
-	{ title: "Солдат", src: "https://archive.org/download/2_20261026_20261026_1517/%D0%A1%D0%BE%D0%BB%D0%B4%D0%B0%D1%822.wav" },
+	{ title: "Солдат", src: "https://files.catbox.moe/1b0wk0.mp3" },
     { title: "Волк", src: "https://archive.org/download/2_20261026_20261026_1502/%D0%92%D0%BE%D0%BB%D0%BA2.mp3" },
     { title: "Здравствуй я скучаю", src: "https://files.catbox.moe/cerx4i.mp3" },
     { title: "И лишь один старик молчал", src: "https://files.catbox.moe/ovvabc.mp3" },
