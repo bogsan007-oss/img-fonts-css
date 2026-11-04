@@ -1,5 +1,6 @@
 // Отдельный файл с плейлистом треков
 window.myPlaylist = [
+	{ title: "Давай подитожим", src: "https://file.garden/auTQsu6WBfKgTbW1/%D0%94%D0%B0%D0%B2%D0%B0%D0%B9%D1%82%D0%B5%20%D0%BF%D0%BE%D0%B4%D0%B8%D1%82%D0%BE%D0%B6%D0%B8%D0%BC.mp3" },
 	{ title: "А доживём ли?", src: "https://file.garden/auTQsu6WBfKgTbW1/%D0%90%20%D0%B4%D0%BE%D0%B6%D0%B8%D0%B2%D1%91%D0%BC%20%D0%BB%D0%B8.mp3" },
 	{ title: "Немного за Одессу", src: "https://file.garden/auTQsu6WBfKgTbW1/Odessu.mp3" },
 	{ title: "Солдат", src: "https://files.catbox.moe/1b0wk0.mp3" },
